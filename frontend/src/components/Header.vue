@@ -1,0 +1,42 @@
+<template>
+  <header>
+    <h1>Games</h1>
+    <nav>
+      <ul>
+        <li><router-link to="/">Home</router-link></li>
+        <li><router-link to="/about">About</router-link></li>
+      </ul>
+    </nav>
+  </header>
+</template>
+
+<script setup></script>
+
+<style scoped>
+header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+header h1 {
+  padding-left: 50px;
+  font-size: 40px;
+  margin: 0;
+}
+
+header ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+header a {
+  text-decoration: none;
+  color: #fff;
+}
+
+header a:hover {
+  text-decoration: underline;
+}
+</style>
