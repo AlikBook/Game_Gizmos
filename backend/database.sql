@@ -213,58 +213,7 @@ INSERT INTO Users (user_id, user_mail, password) VALUES
   (2, 'bob@example.com',   'securepass'),
   (3, 'carol@example.com', 'qwerty!@#');
 
--- 2) Rates (original + first batch + second batch)
-INSERT INTO Rates (game_id, user_id, user_mail, Comments, Rate) VALUES
-  -- Originals
-  ('30549', 1, 'alice@example.com', 'User 1 enjoyed game 30549', 6.5),
-  ('30549', 2, 'bob@example.com',   'User 2 enjoyed game 30549', 7.0),
-  ('30549', 3, 'carol@example.com', 'User 3 enjoyed game 30549', 7.5),
-  ('822',   1, 'alice@example.com', 'User 1 enjoyed game 822',   6.5),
-  ('822',   2, 'bob@example.com',   'User 2 enjoyed game 822',   7.0),
-  ('822',   3, 'carol@example.com', 'User 3 enjoyed game 822',   7.5),
-  ('13',    1, 'alice@example.com', 'User 1 enjoyed game 13',    6.5),
-  ('13',    2, 'bob@example.com',   'User 2 enjoyed game 13',    7.0),
-  ('13',    3, 'carol@example.com', 'User 3 enjoyed game 13',    7.5),
-  ('68448', 1, 'alice@example.com', 'User 1 enjoyed game 68448', 6.5),
-  ('68448', 2, 'bob@example.com',   'User 2 enjoyed game 68448', 7.0),
-  ('68448', 3, 'carol@example.com', 'User 3 enjoyed game 68448', 7.5),
-  ('36218', 1, 'alice@example.com', 'User 1 enjoyed game 36218', 6.5),
-  ('36218', 2, 'bob@example.com',   'User 2 enjoyed game 36218', 7.0),
-  ('36218', 3, 'carol@example.com', 'User 3 enjoyed game 36218', 7.5),
 
-  -- Batch 1 (Terraforming Mars, Azul, Wingspan, Ticket to Ride, Splendor)
-  ('167791', 1, 'alice@example.com', 'Stratégie très riche, un de mes préférés.',             8.20),
-  ('167791', 2, 'bob@example.com',   'Parties un peu longues mais super theme.',            8.50),
-  ('167791', 3, 'carol@example.com', 'Très immersif, cartes variées. À jouer souvent.',     8.00),
-  ('230802', 1, 'alice@example.com', 'Belle réflexion, facile à expliquer aux débutants.',   7.80),
-  ('230802', 2, 'bob@example.com',   'Design et matériel top, rejouabilité moyenne.',      8.00),
-  ('230802', 3, 'carol@example.com', 'Jeu familial parfait pour 2-4 joueurs.',              7.50),
-  ('266192', 1, 'alice@example.com', 'Mécanique fluide, super thème nature.',                8.40),
-  ('266192', 2, 'bob@example.com',   'Cartes magnifiques, règles claires.',                 8.70),
-  ('266192', 3, 'carol@example.com', 'Un peu cher mais vaut le coup.',                      8.20),
-  ('9209',   1, 'alice@example.com', 'Classique indémodable, parties rapides.',              7.20),
-  ('9209',   2, 'bob@example.com',   'Toujours fun même après 100 parties.',                7.50),
-  ('9209',   3, 'carol@example.com', 'Parfait pour débuter en hobby.',                      7.00),
-  ('148228', 1, 'alice@example.com', 'Mécanique d’achat simple et efficace.',               7.60),
-  ('148228', 2, 'bob@example.com',   'Très bon jeu de collecte de ressources.',             7.80),
-  ('148228', 3, 'carol@example.com', 'Idéal en famille, rapide à installer.',               7.40),
-
-  -- Batch 2 (Codenames, Gloomhaven, Pandemic Legacy, Burrows and Badgers, Root)
-  ('178900', 1, 'alice@example.com', 'Super jeu d’ambiance, idéal en groupe.',           7.90),
-  ('178900', 2, 'bob@example.com',   'Mécanique originale, très amusant.',               8.10),
-  ('178900', 3, 'carol@example.com', 'Facile à expliquer, parties rapides.',             7.80),
-  ('174430', 1, 'alice@example.com', 'Campagne épique, rejouabilité énorme.',           8.50),
-  ('174430', 2, 'bob@example.com',   'Complexe mais gratifiant.',                       8.70),
-  ('174430', 3, 'carol@example.com', 'Règles denses mais très immersif.',              8.40),
-  ('161936', 1, 'alice@example.com', 'Meilleure campagne coopérative que j’ai jouée.',   8.60),
-  ('161936', 2, 'bob@example.com',   'Émotions fortes, très narratif.',                  8.80),
-  ('161936', 3, 'carol@example.com', 'Un peu cher mais extraordinaire.',               8.50),
-  ('204680', 1, 'alice@example.com', 'Mécanique asymétrique très fun.',                  7.70),
-  ('204680', 2, 'bob@example.com',   'Jeu de plateau original, simple à prendre en main.',7.60),
-  ('204680', 3, 'carol@example.com', 'Variantes puissantes, bon theme.',                  7.80),
-  ('237182', 1, 'alice@example.com', 'Asymétrie parfaite, top design.',                 8.30),
-  ('237182', 2, 'bob@example.com',   'Très bon équilibre des factions.',                 8.50),
-  ('237182', 3, 'carol@example.com', 'Parties tendues et stratégiques.',                8.20);
 
 -- 3) Mechanics
 INSERT INTO Mechanics (mechanic_id, mechanic_name) VALUES
@@ -641,4 +590,57 @@ begin
 end;
 //
 delimiter ;
+
+-- 2) Rates (original + first batch + second batch)
+INSERT INTO Rates (game_id, user_id, user_mail, Comments, Rate) VALUES
+  -- Originals
+  ('30549', 1, 'alice@example.com', 'User 1 enjoyed game 30549', 6.5),
+  ('30549', 2, 'bob@example.com',   'User 2 enjoyed game 30549', 7.0),
+  ('30549', 3, 'carol@example.com', 'User 3 enjoyed game 30549', 7.5),
+  ('822',   1, 'alice@example.com', 'User 1 enjoyed game 822',   6.5),
+  ('822',   2, 'bob@example.com',   'User 2 enjoyed game 822',   7.0),
+  ('822',   3, 'carol@example.com', 'User 3 enjoyed game 822',   7.5),
+  ('13',    1, 'alice@example.com', 'User 1 enjoyed game 13',    6.5),
+  ('13',    2, 'bob@example.com',   'User 2 enjoyed game 13',    7.0),
+  ('13',    3, 'carol@example.com', 'User 3 enjoyed game 13',    7.5),
+  ('68448', 1, 'alice@example.com', 'User 1 enjoyed game 68448', 6.5),
+  ('68448', 2, 'bob@example.com',   'User 2 enjoyed game 68448', 7.0),
+  ('68448', 3, 'carol@example.com', 'User 3 enjoyed game 68448', 7.5),
+  ('36218', 1, 'alice@example.com', 'User 1 enjoyed game 36218', 6.5),
+  ('36218', 2, 'bob@example.com',   'User 2 enjoyed game 36218', 7.0),
+  ('36218', 3, 'carol@example.com', 'User 3 enjoyed game 36218', 7.5),
+
+  -- Batch 1 (Terraforming Mars, Azul, Wingspan, Ticket to Ride, Splendor)
+  ('167791', 1, 'alice@example.com', 'Stratégie très riche, un de mes préférés.',             8.20),
+  ('167791', 2, 'bob@example.com',   'Parties un peu longues mais super theme.',            8.50),
+  ('167791', 3, 'carol@example.com', 'Très immersif, cartes variées. À jouer souvent.',     8.00),
+  ('230802', 1, 'alice@example.com', 'Belle réflexion, facile à expliquer aux débutants.',   7.80),
+  ('230802', 2, 'bob@example.com',   'Design et matériel top, rejouabilité moyenne.',      8.00),
+  ('230802', 3, 'carol@example.com', 'Jeu familial parfait pour 2-4 joueurs.',              7.50),
+  ('266192', 1, 'alice@example.com', 'Mécanique fluide, super thème nature.',                8.40),
+  ('266192', 2, 'bob@example.com',   'Cartes magnifiques, règles claires.',                 8.70),
+  ('266192', 3, 'carol@example.com', 'Un peu cher mais vaut le coup.',                      8.20),
+  ('9209',   1, 'alice@example.com', 'Classique indémodable, parties rapides.',              7.20),
+  ('9209',   2, 'bob@example.com',   'Toujours fun même après 100 parties.',                7.50),
+  ('9209',   3, 'carol@example.com', 'Parfait pour débuter en hobby.',                      7.00),
+  ('148228', 1, 'alice@example.com', 'Mécanique d’achat simple et efficace.',               7.60),
+  ('148228', 2, 'bob@example.com',   'Très bon jeu de collecte de ressources.',             7.80),
+  ('148228', 3, 'carol@example.com', 'Idéal en famille, rapide à installer.',               7.40),
+
+  -- Batch 2 (Codenames, Gloomhaven, Pandemic Legacy, Burrows and Badgers, Root)
+  ('178900', 1, 'alice@example.com', 'Super jeu d’ambiance, idéal en groupe.',           7.90),
+  ('178900', 2, 'bob@example.com',   'Mécanique originale, très amusant.',               8.10),
+  ('178900', 3, 'carol@example.com', 'Facile à expliquer, parties rapides.',             7.80),
+  ('174430', 1, 'alice@example.com', 'Campagne épique, rejouabilité énorme.',           8.50),
+  ('174430', 2, 'bob@example.com',   'Complexe mais gratifiant.',                       8.70),
+  ('174430', 3, 'carol@example.com', 'Règles denses mais très immersif.',              8.40),
+  ('161936', 1, 'alice@example.com', 'Meilleure campagne coopérative que j’ai jouée.',   8.60),
+  ('161936', 2, 'bob@example.com',   'Émotions fortes, très narratif.',                  8.80),
+  ('161936', 3, 'carol@example.com', 'Un peu cher mais extraordinaire.',               8.50),
+  ('204680', 1, 'alice@example.com', 'Mécanique asymétrique très fun.',                  7.70),
+  ('204680', 2, 'bob@example.com',   'Jeu de plateau original, simple à prendre en main.',7.60),
+  ('204680', 3, 'carol@example.com', 'Variantes puissantes, bon theme.',                  7.80),
+  ('237182', 1, 'alice@example.com', 'Asymétrie parfaite, top design.',                 8.30),
+  ('237182', 2, 'bob@example.com',   'Très bon équilibre des factions.',                 8.50),
+  ('237182', 3, 'carol@example.com', 'Parties tendues et stratégiques.',                8.20);
 
