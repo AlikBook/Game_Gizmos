@@ -1,6 +1,4 @@
 <template>
-
-<template>
   <div v-if="game">
     <div>
       <img :src="game.game_image" alt="Game image" />
@@ -14,7 +12,7 @@
   <div v-else>
     Loading...
   </div>
-</template>
+
 </template>
 
 <script setup>
