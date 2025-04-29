@@ -45,7 +45,26 @@ app.get("/allgames", (req, res) => {
   });
 });
 
-// Démarrer le serveur
+
+app.get("/game/:id", (req, res) => {
+  const sql = "SELECT * FROM GAMES WHERE game_id = ?";
+  const gameId = req.params.id;
+
+  connection.query(sql, [gameId], (err, results) => {
+    if (err) {
+      console.error("Erreur lors de la récupération du jeu:", err);
+      res.status(500).send("Erreur serveur");
+    } else {
+      if (results.length > 0) {
+        res.json(results[0]);  
+      } else {
+        res.status(404).send("Jeu non trouvé");
+      }
+    }
+  });
+});
+
+
 app.listen(PORT, () => {
   console.log(`Backend is running on http://localhost:${PORT}`);
 });
