@@ -429,7 +429,7 @@ for each row
 begin
 	update Games
     set avg_rate = GetAverageRating(NEW.game_id)
-    where id = NEW.game_id;
+    where game_id = NEW.game_id;
 end;
 //
 delimiter ;
