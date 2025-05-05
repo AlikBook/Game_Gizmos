@@ -5,12 +5,18 @@
     <FilterButton @showFilter="handleFilterToggle" />
     <FiltersList v-if="showFilters" />
     <div class="game-list">
-      <div v-for="game in data" :key="game.id" class="game-item">
+      <router-link
+        v-for="game in data"
+        :key="game.game_id"
+        :to="`/game/${game.game_id}`"
+        class="game-item"
+        style="text-decoration: none; color: inherit;"
+      >
         <h3>{{ game.game_name }}</h3>
         <p>Year: {{ game.publication_year }}</p>
         <p>Average rate: {{ game.avg_rate }}</p>
         <img :src="game.game_image" :alt="game.game_name" />
-      </div>
+      </router-link>
     </div>
   </div>
 </template>
