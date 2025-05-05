@@ -2,11 +2,17 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "../src/components/Home.vue";
 import Discover from "../src/components/Discover.vue";
 import Individual_game from "../Individual_game.vue";
+import About from "../src/components/About.vue";
 
 const routes = [
   { path: "/", name: "Home", component: Home },
   { path: "/discover", name: "Discover", component: Discover },
   { path: "/game/:id", name: "Individual_game", component: Individual_game },
+  {
+    path: '/about',
+    name: 'About',
+    component: About 
+  }
 ];
 
 const router = createRouter({
