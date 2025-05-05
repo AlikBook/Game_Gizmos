@@ -13,6 +13,7 @@ app.use(express.json());
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
+  port: process.env.DB_PORT,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
 });
@@ -46,24 +47,54 @@ app.get("/allgames", (req, res) => {
 });
 
 
-app.get("/game/:id", (req, res) => {
-  const sql = "SELECT * FROM GAMES WHERE game_id = ?";
+app.get("/game_rate/:id", (req, res) => {
   const gameId = req.params.id;
 
-  connection.query(sql, [gameId], (err, results) => {
+  const gameQuery = "SELECT * FROM GAMES WHERE game_id = ?";
+  const rateQuery = "SELECT * FROM rates WHERE game_id = ?";
+
+  connection.query(gameQuery, [gameId], (err, gameResults) => {
     if (err) {
-      console.error("Erreur lors de la récupération du jeu:", err);
-      res.status(500).send("Erreur serveur");
-    } else {
-      if (results.length > 0) {
-        res.json(results[0]);  
-      } else {
-        res.status(404).send("Jeu non trouvé");
-      }
+      console.error("Error fetching game:", err);
+      return res.status(500).send("Server error while fetching game");
     }
+
+    if (gameResults.length === 0) {
+      return res.status(404).send("Game not found");
+    }
+
+    connection.query(rateQuery, [gameId], (err, rateResults) => {
+      if (err) {
+        console.error("Error fetching rates:", err);
+        return res.status(500).send("Server error while fetching rates");
+      }
+
+      res.json({
+        game: gameResults[0],
+        rates: rateResults,
+      });
+    });
   });
 });
 
+app.post("/insert_rate/:id", (req, res) => {
+  const { game_id, user_id, user_mail, rate, comments  } = req.body;
+
+  if (!game_id || !user_id || !user_mail || !rate || !comments) {
+    return res.status(400).send("Missing required fields");
+  }
+
+  const sql = "CALL AddRating(?, ?, ?, ?, ?)";
+
+  connection.query(sql, [rate, comments, game_id, user_id, user_mail], (err, result) => {
+    if (err) {
+      console.error("Error saving rating:", err);
+      return res.status(500).send("Error saving rating");
+    }
+
+    res.json({ success: true, result });
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Backend is running on http://localhost:${PORT}`);
