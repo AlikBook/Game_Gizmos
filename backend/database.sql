@@ -644,3 +644,6 @@ INSERT INTO Rates (game_id, user_id, user_mail, Comments, Rate) VALUES
   ('237182', 2, 'bob@example.com',   'Très bon équilibre des factions.',                 8.50),
   ('237182', 3, 'carol@example.com', 'Parties tendues et stratégiques.',                8.20);
 
+
+
+
