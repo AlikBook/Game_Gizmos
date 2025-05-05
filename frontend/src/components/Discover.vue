@@ -2,6 +2,8 @@
   <div class="discover">
     <h2>Discover</h2>
     <p>Explore our collection of games.</p>
+    <FilterButton @showFilter="handleFilterToggle" />
+    <FiltersList v-if="showFilters" />
     <div class="game-list">
       <div v-for="game in data" :key="game.id" class="game-item">
         <h3>{{ game.game_name }}</h3>
@@ -15,8 +17,15 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import FilterButton from "./FilterButton.vue";
+import FiltersList from "./FiltersList.vue";
 
 const data = ref([]);
+const showFilters = ref(false);
+
+const handleFilterToggle = (value) => {
+  showFilters.value = value;
+};
 
 const fetchData = async () => {
   try {
