@@ -108,4 +108,16 @@ p {
   margin-top: 10px;
 }
 
+.game-item h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: #333;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;     
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 2.8em;               
+}
+
 </style>
