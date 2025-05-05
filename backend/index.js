@@ -51,7 +51,7 @@ app.get("/game_rate/:id", (req, res) => {
   const gameId = req.params.id;
 
   const gameQuery = "SELECT * FROM GAMES WHERE game_id = ?";
-  const rateQuery = "SELECT * FROM rates WHERE game_id = ?";
+  const rateQuery = "CALL GetGameRatings(?);";
 
   connection.query(gameQuery, [gameId], (err, gameResults) => {
     if (err) {
@@ -71,7 +71,7 @@ app.get("/game_rate/:id", (req, res) => {
 
       res.json({
         game: gameResults[0],
-        rates: rateResults,
+        rates: rateResults[0],
       });
     });
   });
