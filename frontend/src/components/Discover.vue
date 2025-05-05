@@ -64,10 +64,8 @@ const filteredData = computed(() => {
       game.publication_year >= appliedFilters.value.yearRange[0] &&
       game.publication_year <= appliedFilters.value.yearRange[1];
 
-    // Filtrer par note minimale
     const meetsMinimalRate = game.avg_rate >= appliedFilters.value.minimalRate;
 
-    // Filtrer par nom (recherche partielle, insensible à la casse)
     const matchesGameName = game.game_name
       .toLowerCase()
       .includes(appliedFilters.value.gameName.toLowerCase());

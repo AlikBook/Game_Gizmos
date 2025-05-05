@@ -47,7 +47,6 @@ app.get("/allgames", (req, res) => {
   });
 });
 
-
 app.get("/game_rate/:id", (req, res) => {
   const gameId = req.params.id;
 
@@ -79,7 +78,7 @@ app.get("/game_rate/:id", (req, res) => {
 });
 
 app.post("/insert_rate/:id", (req, res) => {
-  const { game_id, user_id, user_mail, rate, comments  } = req.body;
+  const { game_id, user_id, user_mail, rate, comments } = req.body;
 
   if (!game_id || !user_id || !user_mail || !rate || !comments) {
     return res.status(400).send("Missing required fields");
@@ -87,13 +86,29 @@ app.post("/insert_rate/:id", (req, res) => {
 
   const sql = "CALL AddRating(?, ?, ?, ?, ?)";
 
-  connection.query(sql, [rate, comments, game_id, user_id, user_mail], (err, result) => {
-    if (err) {
-      console.error("Error saving rating:", err);
-      return res.status(500).send("Error saving rating");
-    }
+  connection.query(
+    sql,
+    [rate, comments, game_id, user_id, user_mail],
+    (err, result) => {
+      if (err) {
+        console.error("Error saving rating:", err);
+        return res.status(500).send("Error saving rating");
+      }
 
-    res.json({ success: true, result });
+      res.json({ success: true, result });
+    }
+  );
+});
+
+app.get("/events", (req, res) => {
+  const sql = "SELECT * FROM Events";
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.error("Erreur lors de la récupération des événements:", err);
+      res.status(500).send("Erreur serveur");
+    } else {
+      res.json(results);
+    }
   });
 });
 
