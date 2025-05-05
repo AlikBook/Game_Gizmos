@@ -190,7 +190,12 @@ app.post("/login", (req, res) => {
           { expiresIn: "1d" }
         );
 
-        res.json({ token, message: "Connexion réussie" });
+        res.json({
+          token,
+          user_id: user.user_id, // ✅ send the user_id from DB
+          email: user.user_mail,
+          message: "Connexion réussie"
+        });
       } catch (compareError) {
         console.error("Erreur lors de la comparaison des mots de passe :", compareError);
         res.status(500).json({ message: "Erreur serveur" });
