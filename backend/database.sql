@@ -21,7 +21,7 @@ CREATE TABLE Categories(
 );
 
 CREATE TABLE Users(
-   user_id INT,
+   user_id INT auto_increment,
    user_mail VARCHAR(50),
    password VARCHAR(50),
    PRIMARY KEY(user_id, user_mail)
@@ -644,6 +644,6 @@ INSERT INTO Rates (game_id, user_id, user_mail, Comments, Rate) VALUES
   ('237182', 2, 'bob@example.com',   'Très bon équilibre des factions.',                 8.50),
   ('237182', 3, 'carol@example.com', 'Parties tendues et stratégiques.',                8.20);
 
-
+ALTER TABLE Users MODIFY password VARCHAR(255);
 
 
