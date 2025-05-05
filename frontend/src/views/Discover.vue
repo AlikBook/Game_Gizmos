@@ -24,8 +24,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import FilterButton from "./FilterButton.vue";
-import FiltersList from "./FiltersList.vue";
+import FilterButton from "../components/FilterButton.vue";
+import FiltersList from "../components/FiltersList.vue";
 
 const data = ref([]);
 const showFilters = ref(false);
