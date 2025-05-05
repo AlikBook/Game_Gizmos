@@ -110,6 +110,21 @@ app.get("/events", (req, res) => {
   });
 });
 
+app.get("/upcoming_events", (req, res) => {
+  const sql = "SELECT * FROM UpcomingEvents";
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.error(
+        "Erreur lors de la récupération des événements à venir:",
+        err
+      );
+      res.status(500).send("Erreur serveur");
+    } else {
+      res.json(results);
+    }
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Backend is running on http://localhost:${PORT}`);
 });
