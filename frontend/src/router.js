@@ -3,7 +3,6 @@ import Home from "../src/components/Home.vue";
 import Discover from "../src/components/Discover.vue";
 import Individual_game from "../Individual_game.vue";
 import Events from "../src/views/Events.vue";
-
 import About from "../src/components/About.vue";
 
 
