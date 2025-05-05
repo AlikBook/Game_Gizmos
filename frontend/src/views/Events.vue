@@ -35,4 +35,20 @@ onMounted(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.events-container {
+  padding: 20px;
+}
+.events-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.event-card {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+</style>
