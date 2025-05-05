@@ -22,7 +22,7 @@
         type="range"
         id="Rate"
         min="0"
-        max="5"
+        max="10"
         step="0.5"
         v-model="filters.minimalRate"
       />{{ filters.minimalRate }} <br />
@@ -39,7 +39,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import Slider from "@vueform/slider";
 import "@vueform/slider/themes/default.css";
 
@@ -51,6 +51,14 @@ const filters = ref({
 });
 
 const emit = defineEmits(["filterData"]);
+
+watch(
+  filters,
+  (newFilters) => {
+    emit("filterData", newFilters);
+  },
+  { deep: true }
+);
 </script>
 
 <style>
