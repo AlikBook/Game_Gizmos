@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const mysql = require("mysql2");
 const cors = require("cors");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const PORT = 3000;
 
 require("dotenv").config();
@@ -127,4 +129,87 @@ app.get("/upcoming_events", (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Backend is running on http://localhost:${PORT}`);
+});
+
+app.post("/register", async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email and password are required" });
+  }
+
+  // Vérifier si l'email existe déjà
+  connection.query(
+    "SELECT * FROM Users WHERE user_mail = ?",
+    [email],
+    async (err, results) => {
+      if (err) {
+        console.error("Erreur lors de l'enregistrement :", err);
+        return res.status(500).json({ message: "Erreur serveur" });
+      }
+
+      if (results.length > 0) {
+        return res.status(400).json({ message: "L'email existe déjà" });
+      }
+
+      try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Insérer le nouvel utilisateur dans la base de données
+        connection.query(
+          "INSERT INTO Users (user_mail, password) VALUES (?, ?)",
+          [email, hashedPassword],
+          (err, results) => {
+            if (err) {
+              console.error("Erreur lors de l'enregistrement :", err);
+              return res.status(500).json({ message: "Erreur serveur" });
+            }
+            res.status(201).json({ message: "Utilisateur enregistré avec succès" });
+          }
+        );
+      } catch (hashError) {
+        console.error("Erreur lors du hashage du mot de passe :", hashError);
+        res.status(500).json({ message: "Erreur serveur" });
+      }
+    }
+  );
+});
+
+app.post("/login", (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email et mot de passe requis" });
+  }
+
+  connection.query(
+    "SELECT * FROM Users WHERE user_mail = ?",
+    [email],
+    async (err, results) => {
+      if (err || results.length === 0) {
+        return res.status(401).json({ message: "Identifiants invalides" });
+      }
+
+      const user = results[0];
+      try {
+        const match = await bcrypt.compare(password, user.password);
+
+        if (!match) {
+          return res.status(401).json({ message: "Identifiants invalides" });
+        }
+
+        // Générer un token JWT
+        const token = jwt.sign(
+          { user_id: user.user_id, email: user.user_mail },
+          process.env.JWT_SECRET,
+          { expiresIn: "1d" }
+        );
+
+        res.json({ token, message: "Connexion réussie" });
+      } catch (compareError) {
+        console.error("Erreur lors de la comparaison des mots de passe :", compareError);
+        res.status(500).json({ message: "Erreur serveur" });
+      }
+    }
+  );
 });
