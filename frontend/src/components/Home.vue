@@ -3,6 +3,7 @@
     <h1>Welcome to the Game Store</h1>
     <p>Explore our collection of games.</p>
     <router-link to="/Discover">View Games</router-link>
+
   </div>
 </template>
 

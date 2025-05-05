@@ -83,21 +83,70 @@ onMounted(() => {
 .discover {
   margin-top: 50px;
   padding: 20px;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h2 {
+  font-size: 32px;
+  margin-bottom: 5px;
+}
+
+p {
+  font-size: 16px;
+  color: #555;
 }
 
 .game-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 25px;
+  margin-top: 30px;
 }
 
 .game-item {
   border: 1px solid #ccc;
-  padding: 10px;
-  width: 150px;
-  text-align: center;
-  border-radius: 15px;
+  border-radius: 16px;
+  padding: 15px;
+  background-color: #fafafa;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
+.game-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.game-item h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.game-item p {
+  font-size: 14px;
+  margin: 4px 0;
+  color: #666;
+}
+
+.game-item img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.game-item h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: #333;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;     
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 2.8em;               
+}
+
 </style>

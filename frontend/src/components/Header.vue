@@ -1,6 +1,6 @@
 <template>
   <header>
-    <h1>Games</h1>
+    <h1>GameGizmos</h1>
     <nav>
       <ul>
         <li><router-link to="/">Home</router-link></li>
@@ -35,7 +35,7 @@ header ul {
 
 header a {
   text-decoration: none;
-  color: #fff;
+  color: #100f0f;
 }
 
 header a:hover {
