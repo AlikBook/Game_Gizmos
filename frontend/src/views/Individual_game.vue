@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <div class="comment_insert">
+    <div class="comment_insert" v-if="isLoggedIn">
       <input class="comment_insert_ipt_1" v-model="userInput" type="text" placeholder="Give us your opinion" />
       <input type="number" v-model="rating" min="0" max="10" step="0.1" placeholder="5.1"/>
       <button @click="save_comment">Save</button>
@@ -41,9 +41,12 @@
 <script setup>
     import { ref, onMounted } from 'vue';
     import { useRoute } from 'vue-router';
+    const isLoggedIn = ref(!!localStorage.getItem("token")); 
     
-    const user_id = 4; 
-    const user_mail = "guest@example.com";
+    
+    const user_mail = localStorage.getItem("username");
+    const user_id = localStorage.getItem("user_id");
+    console.log(user_id)
     
     const rating = ref(0);
 
@@ -80,10 +83,6 @@
       }
     }
 
-
-
-    
-
     const fetchData = async () => {
       try {
         const id = route.params.id;
@@ -97,9 +96,6 @@
         console.error("Error fetching game and rates:", error);
       }
     };
-
-
-    
 
     onMounted(fetchData);
 </script>
