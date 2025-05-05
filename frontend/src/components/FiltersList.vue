@@ -2,15 +2,18 @@
   <div class="filters-list">
     <h3>Filters</h3>
     <div class="filter-option">
-      <label for="year-slider">Year</label><br />
-      <Slider
-        v-model="filters.yearRange"
-        :min="1900"
-        :max="2025"
-        :step="1"
-        :range="true"
-        class="custom-slider"
-      />
+      <div class="slider-container">
+        <label for="year-slider">Year</label>
+        <Slider
+          v-model="filters.yearRange"
+          :min="1900"
+          :max="2025"
+          :step="1"
+          :range="true"
+          class="custom-slider"
+        />
+      </div>
+
       <p>
         Selected Range: {{ filters.yearRange[0] }} - {{ filters.yearRange[1] }}
       </p>
@@ -50,7 +53,7 @@ const filters = ref({
 const emit = defineEmits(["filterData"]);
 </script>
 
-<style scoped>
+<style>
 .filters-list {
   padding: 20px;
   border: 1px solid #ccc;
@@ -58,18 +61,32 @@ const emit = defineEmits(["filterData"]);
   margin-top: 20px;
 }
 
+.slider-container {
+  display: flex;
+  gap: 50px;
+}
+
 .custom-slider {
   width: 250px;
   margin: 10px 0;
-}
-</style>
+  z-index: 100;
 
-<style>
-:root {
-  --slider-color: #4c56af;
-  --slider-thumb-color: #4c56af;
-  --slider-bg: #e0e0e0;
-  --slider-thumb-border-color: #4c56af;
-  --slider-thumb-size: 50px;
+  --slider-height: 8px;
+
+  --slider-handle-height: 20px;
+  --slider-handle-width: 20px;
+
+  --slider-connect-bg: #2e3e7d;
+  --slider-handle-bg: #2e3e7d;
+
+  --slider-handle-border: 2px solid #2e3e7d;
+  --slider-handle-radius: 50%;
+
+  --slider-tooltip-bg: #2e3e7d;
+}
+
+.custom-slider .slider-touch-area {
+  height: 0;
+  width: 0;
 }
 </style>

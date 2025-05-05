@@ -1,12 +1,4 @@
 * {
   margin: 0;
   padding: 0;
-  background-color: #121212;
-  color: #fff;
-}
-
-:root {
-  --slider-connect-bg: #3b82f6;
-  --slider-tooltip-bg: #3b82f6;
-  --slider-handle-ring-color: #3b82f630;
 }

@@ -20,13 +20,11 @@ const toggleFilters = () => {
 .filter-button {
   display: flex;
   align-items: center;
-  color: white;
   padding: 10px 20px;
   text-decoration: none;
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
-  border-color: white;
   border-radius: 15px;
 }
 
