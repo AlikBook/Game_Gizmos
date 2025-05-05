@@ -13,7 +13,6 @@ app.use(express.json());
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
-  port: process.env.DB_PORT,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
 });
@@ -51,7 +50,7 @@ app.get("/game_rate/:id", (req, res) => {
   const gameId = req.params.id;
 
   const gameQuery = "SELECT * FROM GAMES WHERE game_id = ?";
-  const rateQuery = "SELECT * FROM rates WHERE game_id = ?";
+  const rateQuery = "CALL GetGameRatings(?);";
 
   connection.query(gameQuery, [gameId], (err, gameResults) => {
     if (err) {
@@ -71,7 +70,7 @@ app.get("/game_rate/:id", (req, res) => {
 
       res.json({
         game: gameResults[0],
-        rates: rateResults,
+        rates: rateResults[0],
       });
     });
   });
