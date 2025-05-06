@@ -3,11 +3,16 @@
     <div class="game_container_details">
       <img :src="game.game_image" alt="Game image" />
       <div class="game_description">
-        <h2>{{ game.game_name }}</h2>
+        <h1>{{ game.game_name }}</h1>
         
-        <p><u>Published:</u> {{ game.publication_year }}</p>
+        <p><u>Published</u> : {{ game.publication_year }}</p>
+        <p><u>Game Artist</u> : {{ game.artist_name }}</p>
+        <p><u>Game Designer</u> : {{ game.designer_name	 }}</p>
+        <p><u>Publisher</u> : {{game.publisher_name	  }}</p>
         <p><u>Description:</u><br>
-           {{ game.game_description }}</p>
+           {{ game.game_description }}
+        </p>
+        
 
         
       </div>
@@ -26,7 +31,7 @@
     <div class="User_comments">
       <div v-for="rate in rates">
         <h4>{{ rate.user_mail }}</h4>
-        <p>{{ rate.Comments }} {{ rate.Rate }}</p>
+        <p>{{ rate.Comments }} | Rate: {{ rate.Rate }} /10 </p>
       </div>
     </div>
     
@@ -78,6 +83,7 @@
 
         const data = await res.json();
         console.log('Success:', data);
+        window.location.reload();
       } catch (err) {
         console.error('Error submitting rating:', err);
       }
@@ -110,7 +116,8 @@
   align-items: center;
   width: 100%;
   padding-bottom: 20px;
-  
+  background-color: #f7f7f7;
+  padding-top: 20px;
 }
 .game_container_details{
   width: 90%;
@@ -120,6 +127,7 @@
   display: flex;
   justify-content: space-evenly;
   color: white;
+  gap: 10px;
   
 }
 .game_description{

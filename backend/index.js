@@ -50,7 +50,7 @@ app.get("/allgames", (req, res) => {
 app.get("/game_rate/:id", (req, res) => {
   const gameId = req.params.id;
 
-  const gameQuery = "SELECT * FROM GAMES WHERE game_id = ?";
+  const gameQuery = "SELECT * FROM GameDetails WHERE game_id = ?";
   const rateQuery = "CALL GetGameRatings(?);";
 
   connection.query(gameQuery, [gameId], (err, gameResults) => {
