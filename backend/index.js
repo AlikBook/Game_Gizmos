@@ -110,6 +110,7 @@ app.get("/events", (req, res) => {
   });
 });
 
+
 app.post("/create-event", (req, res) => {
   const { event_name, event_description, max_participants, min_participants, game_id } = req.body;
 
@@ -134,6 +135,21 @@ app.post("/create-event", (req, res) => {
       res.status(201).json({ message: "Event created successfully", eventId: result.insertId });
     }
   );
+
+app.get("/upcoming_events", (req, res) => {
+  const sql = "SELECT * FROM UpcomingEvents";
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.error(
+        "Erreur lors de la récupération des événements à venir:",
+        err
+      );
+      res.status(500).send("Erreur serveur");
+    } else {
+      res.json(results);
+    }
+  });
+
 });
 
 app.listen(PORT, () => {
@@ -159,6 +175,28 @@ app.post("/register", (req, res) => {
         }
 
         return res.status(500).json({ message: "Erreur serveur" });
+
+      try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Insérer le nouvel utilisateur dans la base de données
+        connection.query(
+          "INSERT INTO Users (user_mail, password) VALUES (?, ?)",
+          [email, hashedPassword],
+          (err, results) => {
+            if (err) {
+              console.error("Erreur lors de l'enregistrement :", err);
+              return res.status(500).json({ message: "Erreur serveur" });
+            }
+            res
+              .status(201)
+              .json({ message: "Utilisateur enregistré avec succès" });
+          }
+        );
+      } catch (hashError) {
+        console.error("Erreur lors du hashage du mot de passe :", hashError);
+        res.status(500).json({ message: "Erreur serveur" });
+
       }
 
       res.status(201).json({ message: "Utilisateur enregistré avec succès" });
@@ -183,8 +221,34 @@ app.post("/login", (req, res) => {
 
       const user = results[0];
 
+
       if (password !== user.password) {
         return res.status(401).json({ message: "Identifiants invalides" });
+
+        if (!match) {
+          return res.status(401).json({ message: "Identifiants invalides" });
+        }
+
+        // Générer un token JWT
+        const token = jwt.sign(
+          { user_id: user.user_id, email: user.user_mail },
+          process.env.JWT_SECRET,
+          { expiresIn: "1d" }
+        );
+
+        res.json({
+          token,
+          user_id: user.user_id, // ✅ send the user_id from DB
+          email: user.user_mail,
+          message: "Connexion réussie",
+        });
+      } catch (compareError) {
+        console.error(
+          "Erreur lors de la comparaison des mots de passe :",
+          compareError
+        );
+        res.status(500).json({ message: "Erreur serveur" });
+
       }
 
       const token = jwt.sign(
@@ -201,4 +265,25 @@ app.post("/login", (req, res) => {
       });
     }
   );
+});
+
+app.post("/join_event/:event_id", (req, res) => {
+  const eventId = req.params.event_id;
+  const { user_id, user_mail } = req.body;
+
+  if (!user_id || !user_mail) {
+    return res.status(400).json({ message: "User ID and email are required" });
+  }
+  const sql = "CALL JoinEvent(?, ?, ?)";
+  connection.query(sql, [eventId, user_id, user_mail], (err, results) => {
+    if (err) {
+      if (err.sqlState === "45000") {
+        return res.status(400).json({ message: err.sqlMessage });
+      }
+      console.error("Error joining event:", err);
+      return res.status(500).json({ message: "Server error" });
+    }
+
+    res.json({ message: "Successfully joined the event", results });
+  });
 });

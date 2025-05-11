@@ -81,10 +81,10 @@ onMounted(() => {
 
 <style scoped>
 .discover {
-  margin-top: 50px;
+  margin-top: 100px;
   padding: 20px;
   text-align: center;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 h2 {
@@ -142,11 +142,11 @@ p {
   margin-bottom: 8px;
   color: #333;
   display: -webkit-box;
-  -webkit-line-clamp: 2;     
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  height: 2.8em;               
+  height: 2.8em;
 }
-
 </style>
