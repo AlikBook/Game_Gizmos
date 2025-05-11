@@ -112,6 +112,21 @@ app.get("/events", (req, res) => {
   });
 });
 
+app.get("/upcoming_events", (req, res) => {
+  const sql = "SELECT * FROM UpcomingEvents";
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.error(
+        "Erreur lors de la récupération des événements à venir:",
+        err
+      );
+      res.status(500).send("Erreur serveur");
+    } else {
+      res.json(results);
+    }
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Backend is running on http://localhost:${PORT}`);
 });
@@ -149,7 +164,9 @@ app.post("/register", async (req, res) => {
               console.error("Erreur lors de l'enregistrement :", err);
               return res.status(500).json({ message: "Erreur serveur" });
             }
-            res.status(201).json({ message: "Utilisateur enregistré avec succès" });
+            res
+              .status(201)
+              .json({ message: "Utilisateur enregistré avec succès" });
           }
         );
       } catch (hashError) {
@@ -194,12 +211,36 @@ app.post("/login", (req, res) => {
           token,
           user_id: user.user_id, // ✅ send the user_id from DB
           email: user.user_mail,
-          message: "Connexion réussie"
+          message: "Connexion réussie",
         });
       } catch (compareError) {
-        console.error("Erreur lors de la comparaison des mots de passe :", compareError);
+        console.error(
+          "Erreur lors de la comparaison des mots de passe :",
+          compareError
+        );
         res.status(500).json({ message: "Erreur serveur" });
       }
     }
   );
+});
+
+app.post("/join_event/:event_id", (req, res) => {
+  const eventId = req.params.event_id;
+  const { user_id, user_mail } = req.body;
+
+  if (!user_id || !user_mail) {
+    return res.status(400).json({ message: "User ID and email are required" });
+  }
+  const sql = "CALL JoinEvent(?, ?, ?)";
+  connection.query(sql, [eventId, user_id, user_mail], (err, results) => {
+    if (err) {
+      if (err.sqlState === "45000") {
+        return res.status(400).json({ message: err.sqlMessage });
+      }
+      console.error("Error joining event:", err);
+      return res.status(500).json({ message: "Server error" });
+    }
+
+    res.json({ message: "Successfully joined the event", results });
+  });
 });

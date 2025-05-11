@@ -409,6 +409,7 @@ CREATE VIEW UpcomingEvents AS
 SELECT 
     e.event_name,
     e.event_description,
+    e.event_id,
     COUNT(p.event_id) AS current_participants,
     e.max_participants
 FROM Events e
@@ -530,34 +531,6 @@ begin
 	update Games
     set avg_rate = GetAverageRating(NEW.game_id)
     where game_id = NEW.game_id;
-end;
-//
-delimiter ;
-
-delimiter //
-create trigger before_participating_insert before insert on Participates
-for each row
-begin 
-	declare current_participants int;
-    declare max_participants_allowed int;
-    select nb_participants into current_participants from Events where event_id = NEW.event_id;
-    select max_participants into max_participants_allowed from Events where event_id = NEW.event_id;
-    
-    if current_participants = max_participants then 
-		signal sqlstate '45000'
-        set message_text = "Maximum number of participants already reached";
-	end if;
-end;
-//
-delimiter ;
-
-delimiter //
-create trigger update_number_participants after insert on Participates
-for each row
-begin
-	update Events
-    set nb_participants = nb_participants+1
-    where event_id = NEW.event_id;
 end;
 //
 delimiter ;
