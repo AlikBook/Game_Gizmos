@@ -45,17 +45,12 @@ const login = async () => {
       password: password.value,
     });
     const { token, user_id } = response.data;
-<<<<<<< HEAD
-
     // Stocker le token et l'email dans le localStorage
-=======
->>>>>>> origin/main
     localStorage.setItem("token", token);
     localStorage.setItem("user_id", user_id);
     localStorage.setItem("username", email.value);
     localStorage.setItem("user_id", user_id);
 
-  
     isLoggedIn.value = true;
     username.value = email.value;
 
