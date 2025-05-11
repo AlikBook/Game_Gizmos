@@ -112,6 +112,32 @@ app.get("/events", (req, res) => {
   });
 });
 
+app.post("/create-event", (req, res) => {
+  const { event_name, event_description, max_participants, min_participants, game_id } = req.body;
+
+  if (!event_name || !event_description || !max_participants || !min_participants || !game_id) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
+  const sql = `
+    INSERT INTO Events (event_name, event_description, nb_participants, max_participants, min_participants, game_id)
+    VALUES (?, ?, 0, ?, ?, ?)
+  `;
+
+  connection.query(
+    sql,
+    [event_name, event_description, max_participants, min_participants, game_id],
+    (err, result) => {
+      if (err) {
+        console.error("Error creating event:", err);
+        return res.status(500).json({ message: "Server error" });
+      }
+
+      res.status(201).json({ message: "Event created successfully", eventId: result.insertId });
+    }
+  );
+});
+
 app.listen(PORT, () => {
   console.log(`Backend is running on http://localhost:${PORT}`);
 });
@@ -123,7 +149,6 @@ app.post("/register", async (req, res) => {
     return res.status(400).json({ message: "Email and password are required" });
   }
 
-  // Vérifier si l'email existe déjà
   connection.query(
     "SELECT * FROM Users WHERE user_mail = ?",
     [email],
@@ -140,7 +165,6 @@ app.post("/register", async (req, res) => {
       try {
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Insérer le nouvel utilisateur dans la base de données
         connection.query(
           "INSERT INTO Users (user_mail, password) VALUES (?, ?)",
           [email, hashedPassword],
@@ -183,7 +207,6 @@ app.post("/login", (req, res) => {
           return res.status(401).json({ message: "Identifiants invalides" });
         }
 
-        // Générer un token JWT
         const token = jwt.sign(
           { user_id: user.user_id, email: user.user_mail },
           process.env.JWT_SECRET,
@@ -192,7 +215,7 @@ app.post("/login", (req, res) => {
 
         res.json({
           token,
-          user_id: user.user_id, // ✅ send the user_id from DB
+          user_id: user.user_id,
           email: user.user_mail,
           message: "Connexion réussie"
         });

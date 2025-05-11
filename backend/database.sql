@@ -61,12 +61,12 @@ CREATE TABLE Publishers(
 );
 
 CREATE TABLE Events(
-   event_id INT,
+   event_id INT AUTO_INCREMENT,
    event_name VARCHAR(50),
    event_description TEXT,
    nb_participants INT,
    max_participants INT,
-   min_participants VARCHAR(50),
+   min_participants INT,
    game_id VARCHAR(50) NOT NULL,
    PRIMARY KEY(event_id),
    FOREIGN KEY(game_id) REFERENCES Games(game_id)
