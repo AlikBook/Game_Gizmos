@@ -50,8 +50,8 @@ app.get("/allgames", (req, res) => {
 app.get("/game_rate/:id", (req, res) => {
   const gameId = req.params.id;
 
-  const gameQuery = "SELECT * FROM GAMES WHERE game_id = ?";
-  const rateQuery = "SELECT * FROM rates WHERE game_id = ?";
+  const gameQuery = "SELECT * FROM GameDetails WHERE game_id = ?";
+  const rateQuery = "CALL GetGameRatings(?);";
 
   connection.query(gameQuery, [gameId], (err, gameResults) => {
     if (err) {
@@ -71,7 +71,7 @@ app.get("/game_rate/:id", (req, res) => {
 
       res.json({
         game: gameResults[0],
-        rates: rateResults,
+        rates: rateResults[0],
       });
     });
   });
@@ -190,7 +190,12 @@ app.post("/login", (req, res) => {
           { expiresIn: "1d" }
         );
 
-        res.json({ token, message: "Connexion réussie" });
+        res.json({
+          token,
+          user_id: user.user_id, // ✅ send the user_id from DB
+          email: user.user_mail,
+          message: "Connexion réussie"
+        });
       } catch (compareError) {
         console.error("Erreur lors de la comparaison des mots de passe :", compareError);
         res.status(500).json({ message: "Erreur serveur" });

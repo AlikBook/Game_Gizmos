@@ -43,11 +43,10 @@ const login = async () => {
       email: email.value,
       password: password.value,
     });
-    const { token } = response.data;
-
-    // Stocker le token et l'email dans le localStorage
+    const { token, user_id } = response.data;
     localStorage.setItem("token", token);
     localStorage.setItem("username", email.value);
+    localStorage.setItem("user_id", user_id);
 
     // Mettre à jour l'état
     isLoggedIn.value = true;
@@ -80,6 +79,7 @@ const register = async () => {
 const logout = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("username");
+  localStorage.removeItem("user_id");
 
   isLoggedIn.value = false;
   username.value = "";
