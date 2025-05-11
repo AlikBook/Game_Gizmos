@@ -16,6 +16,7 @@
       <template v-if="isLoggedIn">
         <span class="welcome">Welcome, {{ username }}!</span>
         <button @click="logout" class="btn btn-logout">Logout</button>
+        <button @click="openCreateEventModal" class="btn btn-secondary">Create Event</button>
       </template>
       <template v-else>
         <input v-model="email" type="email" placeholder="Email" />
@@ -25,6 +26,35 @@
       </template>
     </div>
   </header>
+  <div v-if="showModal" class="modal">
+    <div class="modal-content">
+      <h2>Create an Event</h2>
+      <form @submit.prevent="createEvent">
+        <div>
+          <label for="eventName">Event Name:</label>
+          <input v-model="eventName" id="eventName" type="text" required />
+        </div>
+        <div>
+          <label for="eventDescription">Description:</label>
+          <textarea v-model="eventDescription" id="eventDescription" required></textarea>
+        </div>
+        <div>
+          <label for="maxParticipants">Max Participants:</label>
+          <input v-model="maxParticipants" id="maxParticipants" type="number" required />
+        </div>
+        <div>
+          <label for="minParticipants">Min Participants:</label>
+          <input v-model="minParticipants" id="minParticipants" type="number" required />
+        </div>
+        <div>
+          <label for="gameId">Game ID:</label>
+          <input v-model="gameId" id="gameId" type="text" required />
+        </div>
+        <button type="submit" class="btn btn-secondary">Create Event</button>
+        <button @click="closeModal" class="btn btn-logout">Cancel</button>
+      </form>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -37,6 +67,12 @@ const isLoggedIn = ref(!!localStorage.getItem("token"));
 const username = ref(localStorage.getItem("username") || "");
 const email = ref("");
 const password = ref("");
+const showModal = ref(false);
+const eventName = ref("");
+const eventDescription = ref("");
+const maxParticipants = ref(0);
+const minParticipants = ref(0);
+const gameId = ref("");
 
 const login = async () => {
   try {
@@ -74,7 +110,9 @@ const register = async () => {
     password.value = "";
   } catch (error) {
     console.error("Erreur lors de l'inscription :", error);
-    alert("Erreur lors de la création du compte !");
+
+    const errorMessage = error.response?.data?.message || "Erreur lors de la création du compte !";
+    alert(errorMessage);
   }
 };
 
@@ -86,8 +124,42 @@ const logout = () => {
   isLoggedIn.value = false;
   username.value = "";
 
+  email.value = "";
+  password.value = "";
+
   alert("Déconnexion réussie !");
   router.push("/");
+};
+
+const openCreateEventModal = () => {
+  showModal.value = true; 
+};
+
+const closeModal = () => {
+  showModal.value = false; 
+};
+
+const createEvent = async () => {
+  try {
+    const response = await axios.post("http://localhost:3000/create-event", {
+      event_name: eventName.value,
+      event_description: eventDescription.value,
+      max_participants: maxParticipants.value,
+      min_participants: minParticipants.value,
+      game_id: gameId.value,
+    });
+
+    alert("Event created successfully!");
+    closeModal(); 
+    eventName.value = "";
+    eventDescription.value = "";
+    maxParticipants.value = 0;
+    minParticipants.value = 0;
+    gameId.value = "";
+  } catch (error) {
+    console.error("Error creating event:", error);
+    alert("Failed to create event.");
+  }
 };
 </script>
 
@@ -182,5 +254,119 @@ header {
   font-weight: bold;
   margin-right: 10px;
   padding: 5px 10px;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.modal-content {
+  background: linear-gradient(135deg, #ffffff, #f9f9f9); 
+  padding: 30px;
+  border-radius: 12px;
+  width: 500px;
+  max-width: 90%; 
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); 
+  animation: fadeIn 0.3s ease-out; 
+}
+
+.modal-content h2 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.modal-content form div {
+  margin-bottom: 15px;
+}
+
+.modal-content label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.modal-content input:focus,
+.modal-content textarea:focus {
+  border-color: #4caf50; 
+  outline: none;
+}
+
+.modal-content textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.3s;
+  resize: none; 
+}
+
+.modal-content textarea:focus {
+  border-color: #4caf50; 
+  outline: none;
+}
+
+.modal-content button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.modal-content .btn-secondary {
+  background-color: #4caf50;
+  color: white;
+}
+
+.modal-content .btn-secondary:hover {
+  background-color: #3e8e41;
+}
+
+.modal-content .btn-logout {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.modal-content .btn-logout:hover {
+  background-color: #c0392b;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 </style>

@@ -9,7 +9,6 @@ const PORT = 3000;
 require("dotenv").config();
 app.use(cors());
 
-// Middleware pour parser le JSON
 app.use(express.json());
 
 const connection = mysql.createConnection({
@@ -30,7 +29,6 @@ connection.connect((err) => {
   );
 });
 
-// Route test
 app.get("/", (req, res) => {
   res.send("Hello from the backend!");
 });
@@ -112,6 +110,32 @@ app.get("/events", (req, res) => {
   });
 });
 
+
+app.post("/create-event", (req, res) => {
+  const { event_name, event_description, max_participants, min_participants, game_id } = req.body;
+
+  if (!event_name || !event_description || !max_participants || !min_participants || !game_id) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
+  const sql = `
+    INSERT INTO Events (event_name, event_description, nb_participants, max_participants, min_participants, game_id)
+    VALUES (?, ?, 0, ?, ?, ?)
+  `;
+
+  connection.query(
+    sql,
+    [event_name, event_description, max_participants, min_participants, game_id],
+    (err, result) => {
+      if (err) {
+        console.error("Error creating event:", err);
+        return res.status(500).json({ message: "Server error" });
+      }
+
+      res.status(201).json({ message: "Event created successfully", eventId: result.insertId });
+    }
+  );
+
 app.get("/upcoming_events", (req, res) => {
   const sql = "SELECT * FROM UpcomingEvents";
   connection.query(sql, (err, results) => {
@@ -125,32 +149,32 @@ app.get("/upcoming_events", (req, res) => {
       res.json(results);
     }
   });
+
 });
 
 app.listen(PORT, () => {
   console.log(`Backend is running on http://localhost:${PORT}`);
 });
 
-app.post("/register", async (req, res) => {
+app.post("/register", (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
     return res.status(400).json({ message: "Email and password are required" });
   }
 
-  // Vérifier si l'email existe déjà
   connection.query(
-    "SELECT * FROM Users WHERE user_mail = ?",
-    [email],
-    async (err, results) => {
+    "INSERT INTO Users (user_mail, password) VALUES (?, ?)",
+    [email, password],
+    (err, results) => {
       if (err) {
         console.error("Erreur lors de l'enregistrement :", err);
-        return res.status(500).json({ message: "Erreur serveur" });
-      }
 
-      if (results.length > 0) {
-        return res.status(400).json({ message: "L'email existe déjà" });
-      }
+        if (err.code === "ER_SIGNAL_EXCEPTION" || err.sqlState === "45000") {
+          return res.status(400).json({ message: err.sqlMessage }); 
+        }
+
+        return res.status(500).json({ message: "Erreur serveur" });
 
       try {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -172,7 +196,10 @@ app.post("/register", async (req, res) => {
       } catch (hashError) {
         console.error("Erreur lors du hashage du mot de passe :", hashError);
         res.status(500).json({ message: "Erreur serveur" });
+
       }
+
+      res.status(201).json({ message: "Utilisateur enregistré avec succès" });
     }
   );
 });
@@ -187,14 +214,16 @@ app.post("/login", (req, res) => {
   connection.query(
     "SELECT * FROM Users WHERE user_mail = ?",
     [email],
-    async (err, results) => {
+    (err, results) => {
       if (err || results.length === 0) {
         return res.status(401).json({ message: "Identifiants invalides" });
       }
 
       const user = results[0];
-      try {
-        const match = await bcrypt.compare(password, user.password);
+
+
+      if (password !== user.password) {
+        return res.status(401).json({ message: "Identifiants invalides" });
 
         if (!match) {
           return res.status(401).json({ message: "Identifiants invalides" });
@@ -219,7 +248,21 @@ app.post("/login", (req, res) => {
           compareError
         );
         res.status(500).json({ message: "Erreur serveur" });
+
       }
+
+      const token = jwt.sign(
+        { user_id: user.user_id, email: user.user_mail },
+        process.env.JWT_SECRET,
+        { expiresIn: "1d" }
+      );
+
+      res.json({
+        token,
+        user_id: user.user_id,
+        email: user.user_mail,
+        message: "Connexion réussie",
+      });
     }
   );
 });
