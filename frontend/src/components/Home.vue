@@ -1,102 +1,225 @@
 <template>
   <div class="home">
-    <section class="hero">
-      <h1>Welcome to GameGizmos 🎲</h1>
-      <p>Your hub for discovering, sharing and enjoying board games.</p>
-    </section>
+    <h1>Welcome to <span class="highlight">GameGizmos</span> 🎮</h1>
+    <p class="subtitle">Your gateway to the best games out there!</p>
 
-    <section class="cards">
-      <router-link to="/discover" class="card discover">
-        <h2>Discover</h2>
-        <p>Explore our collection of the most iconic board games.</p>
-      </router-link>
+    <div class="nav-links">
+      <router-link to="/discover" class="nav-card">🎯 Discover</router-link>
+      <router-link to="/events" class="nav-card">📅 Events</router-link>
+      <router-link to="/about" class="nav-card">📖 About</router-link>
+    </div>
 
-      <router-link to="/events" class="card events">
-        <h2>Events</h2>
-        <p>Join local and global board game events happening near you.</p>
-      </router-link>
+    <div class="top-games">
+      <h2>🔥 Top Games of the Moment</h2>
+      <div class="game-cards">
+        <router-link
+          v-for="game in topGames"
+          :key="game.game_id"
+          :to="`/game/${game.game_id}`"
+          class="game-card"
+        >
+          <img :src="game.game_image" :alt="game.game_name" />
+          <h3>{{ game.game_name }}</h3>
+          <p>⭐ {{ game.avg_rate }}</p>
+        </router-link>
+      </div>
+    </div>
 
-      <router-link to="/about" class="card about">
-        <h2>About</h2>
-        <p>Learn more about the creators and the mission of GameGizmos.</p>
-      </router-link>
-    </section>
+    <div class="upcoming-events">
+      <h2>📆 Upcoming Events</h2>
+      <div class="event-cards">
+        <div
+          class="event-card"
+          v-for="event in events"
+          :key="event.event_id"
+        >
+          <img :src="event.game_image" :alt="event.game_name" />
+          <h3>{{ event.event_name }}</h3>
+          <p>{{ event.event_description }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-// No script needed for this basic layout
+import { ref, onMounted } from "vue";
+
+const topGames = ref([]);
+const events = ref([]);  // Variable pour stocker tous les événements
+
+const fetchTopGames = async () => {
+  try {
+    const response = await fetch("http://localhost:3000/allgames");
+    const games = await response.json();
+    topGames.value = games
+      .sort((a, b) => b.avg_rate - a.avg_rate)
+      .slice(0, 2);  // Limite à 2 meilleurs jeux
+  } catch (error) {
+    console.error("Error fetching top games:", error);
+  }
+};
+
+const fetchEvents = async () => {
+  try {
+    const response = await fetch("http://localhost:3000/events");  // On récupère tous les événements
+    const eventData = await response.json();
+    events.value = eventData;  // Stocke tous les événements dans `events`
+  } catch (error) {
+    console.error("Error fetching events:", error);
+  }
+};
+
+onMounted(() => {
+  fetchTopGames();
+  fetchEvents();  // Appel à la fonction pour récupérer les événements
+});
 </script>
 
 <style scoped>
 .home {
-  padding: 60px 20px;
+  padding: 50px 30px;
   text-align: center;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(to right, #f7f7f7, #ffffff);
+  background-color: #f9f9f9;
+  color: #222;
   min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-.hero {
-  margin-bottom: 50px;
-}
-
-.hero h1 {
-  font-size: 48px;
+h1 {
+  font-size: 3rem;
   margin-bottom: 10px;
-  color: #1e1e1e;
 }
 
-.hero p {
-  font-size: 20px;
+.highlight {
+  color: #ff4d4d;
+}
+
+.subtitle {
+  font-size: 1.2rem;
   color: #555;
+  margin-bottom: 40px;
 }
 
-.cards {
+.nav-links {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 60px;
+  flex-wrap: wrap;
+}
+
+.nav-card {
+  font-size: 1.3rem;
+  padding: 20px 40px;
+  background-color: #ff4d4d;
+  color: white;
+  border-radius: 15px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s, background-color 0.3s;
+}
+
+.nav-card:hover {
+  transform: translateY(-5px);
+  background-color: #e63e3e;
+}
+
+.top-games {
+  margin-top: 30px;
+}
+
+.top-games h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+.game-cards {
   display: flex;
   justify-content: center;
   gap: 30px;
   flex-wrap: wrap;
 }
 
-.card {
-  background-color: white;
-  border-radius: 20px;
-  padding: 30px;
-  width: 250px;
-  height: 200px;
-  text-align: left;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+.game-card {
+  width: 220px;
+  background: white;
+  color: #333;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
   text-decoration: none;
-  color: #000;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
 }
 
-.card h2 {
-  font-size: 24px;
+.game-card:hover {
+  transform: scale(1.05);
+}
+
+.game-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
   margin-bottom: 10px;
 }
 
-.card p {
-  font-size: 16px;
-  color: #555;
+.game-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+.upcoming-events {
+  margin-top: 60px;
 }
 
-/* Specific color accents */
-.card.discover {
-  border-left: 6px solid #0077cc;
+.upcoming-events h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
 }
 
-.card.events {
-  border-left: 6px solid #ff9933;
+.event-cards {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
 }
 
-.card.about {
-  border-left: 6px solid #66bb6a;
+.event-card {
+  width: 220px;
+  background: #fff;
+  color: #333;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+  text-align: center;
 }
+
+.event-card:hover {
+  transform: scale(1.05);
+}
+
+.event-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.event-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+}
+
+.event-card p {
+  color: #888;
+}
+
 </style>
