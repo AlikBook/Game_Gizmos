@@ -64,6 +64,7 @@ const joinEvent = async (eventId) => {
     }
     const data = await response.json();
     console.log("Joined event:", data);
+    alert("You have successfully joined the event!");
   } catch (error) {
     console.error("Error joining event:", error);
   }
