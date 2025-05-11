@@ -108,7 +108,9 @@ const register = async () => {
     password.value = "";
   } catch (error) {
     console.error("Erreur lors de l'inscription :", error);
-    alert("Erreur lors de la création du compte !");
+
+    const errorMessage = error.response?.data?.message || "Erreur lors de la création du compte !";
+    alert(errorMessage);
   }
 };
 
@@ -119,6 +121,9 @@ const logout = () => {
 
   isLoggedIn.value = false;
   username.value = "";
+
+  email.value = "";
+  password.value = "";
 
   alert("Déconnexion réussie !");
   router.push("/");
