@@ -43,10 +43,11 @@ const login = async () => {
       email: email.value,
       password: password.value,
     });
-    const { token } = response.data;
+    const { token, user_id } = response.data;
 
     // Stocker le token et l'email dans le localStorage
     localStorage.setItem("token", token);
+    localStorage.setItem("user_id", user_id);
     localStorage.setItem("username", email.value);
 
     // Mettre à jour l'état

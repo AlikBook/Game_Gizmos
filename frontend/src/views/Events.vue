@@ -8,6 +8,8 @@
         <p>Number participants: {{ event.nb_participants }}</p>
         <p>From {{ event.min_participants }} to {{ event.max_participants }}</p>
         <p>Game ID: {{ event.game_id }}</p>
+        <p>Event ID: {{ event.event_id }}</p>
+        <button @click="joinEvent(event.event_id)">Join</button>
       </div>
     </div>
 
@@ -20,6 +22,8 @@
           Current Participants: {{ event.current_participants }} /
           {{ event.max_participants }}
         </p>
+        <p>Event ID : {{ event.event_id }}</p>
+        <button @click="joinEvent(event.event_id)">Join</button>
       </div>
     </div>
   </div>
@@ -30,6 +34,40 @@ import { ref, onMounted } from "vue";
 
 const events = ref([]);
 const upcoming_events = ref([]);
+const user_id = ref(localStorage.getItem("user_id"));
+const user_mail = ref(localStorage.getItem("username"));
+
+const joinEvent = async (eventId) => {
+  console.log(user_id.value, user_mail.value);
+
+  if (!user_id.value || !user_mail.value) {
+    alert("Please log in to join an event.");
+    return;
+  }
+  try {
+    const response = await fetch(
+      `http://localhost:3000/join_event/${eventId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          event_id: eventId,
+          user_id: user_id.value,
+          user_mail: user_mail.value,
+        }),
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    console.log("Joined event:", data);
+  } catch (error) {
+    console.error("Error joining event:", error);
+  }
+};
 
 const fetchdata = async () => {
   try {
