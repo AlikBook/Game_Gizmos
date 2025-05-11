@@ -65,7 +65,7 @@ CREATE TABLE Events(
    event_name VARCHAR(50),
    event_description TEXT,
    nb_participants INT,
-   max_participants INT,
+   max_participants INT NOT NULL,
    min_participants VARCHAR(50),
    game_id VARCHAR(50) NOT NULL,
    PRIMARY KEY(event_id),
@@ -417,6 +417,9 @@ GROUP BY e.event_id, e.event_name, e.event_description, e.max_participants;
 
 CREATE VIEW GameDetails AS
 SELECT 
+	g.avg_rate,
+	g.game_image,
+	g.game_id,
     g.game_name,
     g.publication_year,
     a.artist_name,
@@ -537,10 +540,10 @@ for each row
 begin 
 	declare current_participants int;
     declare max_participants_allowed int;
-    select nb_partipants into current_participants from Events where event_id = NEW.event_id;
-    select max_participants into max_participants_allowed from Events where event_if = NEW.event_id;
+    select nb_participants into current_participants from Events where event_id = NEW.event_id;
+    select max_participants into max_participants_allowed from Events where event_id = NEW.event_id;
     
-    if current_participants = max_participant then 
+    if current_participants = max_participants then 
 		signal sqlstate '45000'
         set message_text = "Maximum number of participants already reached";
 	end if;

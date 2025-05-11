@@ -46,39 +46,53 @@
 import { ref, onMounted } from "vue";
 
 const topGames = ref([]);
-const events = ref([]);  // Variable pour stocker tous les événements
+const events = ref([]);  
+const allGames = ref([]); 
 
 const fetchTopGames = async () => {
   try {
     const response = await fetch("http://localhost:3000/allgames");
     const games = await response.json();
+    allGames.value = games;
     topGames.value = games
       .sort((a, b) => b.avg_rate - a.avg_rate)
-      .slice(0, 2);  // Limite à 2 meilleurs jeux
+      .slice(0, 2);
   } catch (error) {
     console.error("Error fetching top games:", error);
   }
 };
 
+
 const fetchEvents = async () => {
   try {
-    const response = await fetch("http://localhost:3000/events");  // On récupère tous les événements
+    const response = await fetch("http://localhost:3000/events");
     const eventData = await response.json();
-    events.value = eventData;  // Stocke tous les événements dans `events`
+
+   
+    events.value = eventData.map(event => {
+      const matchingGame = allGames.value.find(game => game.game_id === event.game_id);
+      return {
+        ...event,
+        game_image: matchingGame?.game_image || "", 
+        game_name: matchingGame?.game_name || "Unknown Game"
+      };
+    });
   } catch (error) {
     console.error("Error fetching events:", error);
   }
 };
 
-onMounted(() => {
-  fetchTopGames();
-  fetchEvents();  // Appel à la fonction pour récupérer les événements
+
+onMounted(async () => {
+  await fetchTopGames(); 
+  fetchEvents();         
 });
+
 </script>
 
 <style scoped>
 .home {
-  padding: 50px 30px;
+  padding: 100px 30px;
   text-align: center;
   background-color: #f9f9f9;
   color: #222;
