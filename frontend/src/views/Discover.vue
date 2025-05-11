@@ -24,8 +24,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import FilterButton from "./FilterButton.vue";
-import FiltersList from "./FiltersList.vue";
+import FilterButton from "../components/FilterButton.vue";
+import FiltersList from "../components/FiltersList.vue";
 
 const data = ref([]);
 const showFilters = ref(false);
@@ -81,7 +81,7 @@ onMounted(() => {
 
 <style scoped>
 .discover {
-  margin-top: 50px;
+  margin-top: 100px;
   padding: 20px;
   text-align: center;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;

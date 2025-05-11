@@ -93,17 +93,44 @@ onMounted(() => {
 <style scoped>
 .events-container {
   padding: 20px;
+  background-color: #f4f4f9;
 }
+
 .events-list {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(300px, 1fr)
+  ); /* Pour une grille réactive */
   gap: 20px;
+  margin-top: 100px;
 }
+
 .event-card {
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.event-card h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.event-card p {
+  font-size: 1em;
+  color: #555;
+}
+
+.event-card strong {
+  font-weight: bold;
+  color: #333;
 }
 </style>

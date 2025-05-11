@@ -1,28 +1,29 @@
 <template>
   <header>
-    <h1>GameGizmos</h1>
+    <div class="logo">
+      <h1>🎲 GameGizmos</h1>
+    </div>
     <nav>
-      <ul>
+      <ul class="nav-links">
         <li><router-link to="/">Home</router-link></li>
-        <li><router-link to="/about">About</router-link></li>
+
         <li><router-link to="/discover">Discover</router-link></li>
         <li><router-link to="/events">Events</router-link></li>
+        <li><router-link to="/about">About</router-link></li>
       </ul>
-      <div class="users">
-        <template v-if="isLoggedIn">
-          <p>Welcome, {{ username }}!</p>
-          <button @click="logout">Logout</button>
-        </template>
-        <template v-else>
-          <div>
-            <input v-model="email" type="email" placeholder="Email" />
-            <input v-model="password" type="password" placeholder="Password" />
-            <button @click="login">Log in</button>
-            <button @click="register">Sign up</button>
-          </div>
-        </template>
-      </div>
     </nav>
+    <div class="users">
+      <template v-if="isLoggedIn">
+        <span class="welcome">Welcome, {{ username }}!</span>
+        <button @click="logout" class="btn btn-logout">Logout</button>
+      </template>
+      <template v-else>
+        <input v-model="email" type="email" placeholder="Email" />
+        <input v-model="password" type="password" placeholder="Password" />
+        <button @click="login" class="btn">Log in</button>
+        <button @click="register" class="btn btn-secondary">Sign up</button>
+      </template>
+    </div>
   </header>
 </template>
 
@@ -44,13 +45,17 @@ const login = async () => {
       password: password.value,
     });
     const { token, user_id } = response.data;
+<<<<<<< HEAD
 
     // Stocker le token et l'email dans le localStorage
+=======
+>>>>>>> origin/main
     localStorage.setItem("token", token);
     localStorage.setItem("user_id", user_id);
     localStorage.setItem("username", email.value);
+    localStorage.setItem("user_id", user_id);
 
-    // Mettre à jour l'état
+  
     isLoggedIn.value = true;
     username.value = email.value;
 
@@ -81,6 +86,7 @@ const register = async () => {
 const logout = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("username");
+  localStorage.removeItem("user_id");
 
   isLoggedIn.value = false;
   username.value = "";
@@ -92,38 +98,93 @@ const logout = () => {
 
 <style scoped>
 header {
-  padding: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #1e1e2f;
+  color: white;
+  padding: 20px 40px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
 }
-
-header h1 {
-  padding-left: 50px;
-  font-size: 40px;
+.logo h1 {
+  font-size: 28px;
   margin: 0;
 }
 
-header ul {
+.nav-links {
   list-style: none;
   display: flex;
-  gap: 20px;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
 }
 
-header a {
+.nav-links a {
+  color: white;
+  font-weight: bold;
   text-decoration: none;
-  color: #100f0f;
+  transition: color 0.3s;
 }
 
-header a:hover {
-  text-decoration: underline;
+.nav-links a:hover {
+  color: #ffd700;
+}
+
+.users {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .users input {
-  margin-right: 10px;
-  padding: 5px;
+  padding: 6px 10px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
 }
 
-.users button {
+.btn {
+  background-color: #ffd700;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  color: black;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #e6c200;
+}
+
+.btn-secondary {
+  background-color: #4caf50;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #3e8e41;
+}
+
+.btn-logout {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.btn-logout:hover {
+  background-color: #c0392b;
+}
+
+.welcome {
+  font-weight: bold;
   margin-right: 10px;
   padding: 5px 10px;
 }

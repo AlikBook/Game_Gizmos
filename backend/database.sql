@@ -23,7 +23,7 @@ CREATE TABLE Categories(
 CREATE TABLE Users(
    user_id INT auto_increment,
    user_mail VARCHAR(50),
-   password VARCHAR(50),
+   password VARCHAR(255),
    PRIMARY KEY(user_id, user_mail)
 );
 
@@ -65,7 +65,7 @@ CREATE TABLE Events(
    event_name VARCHAR(50),
    event_description TEXT,
    nb_participants INT,
-   max_participants INT,
+   max_participants INT NOT NULL,
    min_participants VARCHAR(50),
    game_id VARCHAR(50) NOT NULL,
    PRIMARY KEY(event_id),
@@ -418,6 +418,9 @@ GROUP BY e.event_id, e.event_name, e.event_description, e.max_participants;
 
 CREATE VIEW GameDetails AS
 SELECT 
+	g.avg_rate,
+	g.game_image,
+	g.game_id,
     g.game_name,
     g.publication_year,
     a.artist_name,
@@ -616,5 +619,3 @@ INSERT INTO Rates (game_id, user_id, user_mail, Comments, Rate) VALUES
   ('237182', 1, 'alice@example.com', 'Asymétrie parfaite, top design.',                 8.30),
   ('237182', 2, 'bob@example.com',   'Très bon équilibre des factions.',                 8.50),
   ('237182', 3, 'carol@example.com', 'Parties tendues et stratégiques.',                8.20);
-
-ALTER TABLE Users MODIFY password VARCHAR(255);
