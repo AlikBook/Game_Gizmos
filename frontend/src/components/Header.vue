@@ -6,9 +6,10 @@
     <nav>
       <ul class="nav-links">
         <li><router-link to="/">Home</router-link></li>
-        <li><router-link to="/about">About</router-link></li>
+
         <li><router-link to="/discover">Discover</router-link></li>
         <li><router-link to="/events">Events</router-link></li>
+        <li><router-link to="/about">About</router-link></li>
       </ul>
     </nav>
     <div class="users">
@@ -80,11 +81,12 @@ const login = async () => {
       password: password.value,
     });
     const { token, user_id } = response.data;
+    // Stocker le token et l'email dans le localStorage
     localStorage.setItem("token", token);
+    localStorage.setItem("user_id", user_id);
     localStorage.setItem("username", email.value);
     localStorage.setItem("user_id", user_id);
 
-    // Mettre à jour l'état
     isLoggedIn.value = true;
     username.value = email.value;
 
@@ -163,6 +165,10 @@ const createEvent = async () => {
 
 <style scoped>
 header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   background: #1e1e2f;
   color: white;
   padding: 20px 40px;
@@ -171,8 +177,8 @@ header {
   justify-content: space-between;
   flex-wrap: wrap;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
 }
-
 .logo h1 {
   font-size: 28px;
   margin: 0;

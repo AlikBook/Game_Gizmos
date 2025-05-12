@@ -23,39 +23,50 @@
   </script>
   
   <style scoped>
-  .about {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 2rem;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #f9f9f9;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-    color: #333;
-  }
-  
-  .info {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-    line-height: 1.6;
-    color: #555;
-  }
-  
-  .more-link a {
-    font-size: 1.1rem;
-    color: #007BFF;
-    text-decoration: none;
-    font-weight: bold;
-  }
-  
-  .more-link a:hover {
-    text-decoration: underline;
-  }
+.about {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  padding-top: 120px; /* Ajuste cette valeur pour correspondre à la hauteur de ton header */
+  font-family: 'Arial', sans-serif;
+  text-align: center;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.about:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.info {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+.more-link a {
+  font-size: 1.1rem;
+  color: #007BFF;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.more-link a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+  transform: translateY(-3px);
+}
+
   </style>
   
