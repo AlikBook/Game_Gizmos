@@ -3,7 +3,7 @@
       <div class="footer-content">
         <div class="description">
           <h2>🎲 GameGizmos</h2>
-          <p>GameGizmos est votre plateforme pour découvrir, organiser et partager des événements autour des jeux de société modernes.</p>
+          <p>GameGizmos is your platform for discovering, organizing and sharing events around modern board games.</p>
         </div>
         <div class="contact">
           <p><strong>Contact us:</strong></p>

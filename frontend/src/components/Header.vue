@@ -81,7 +81,7 @@ const login = async () => {
       password: password.value,
     });
     const { token, user_id } = response.data;
-    // Stocker le token et l'email dans le localStorage
+
     localStorage.setItem("token", token);
     localStorage.setItem("user_id", user_id);
     localStorage.setItem("username", email.value);
@@ -93,8 +93,8 @@ const login = async () => {
     alert("Connexion réussie !");
     router.push("/");
   } catch (error) {
-    console.error("Erreur lors de la connexion :", error);
-    alert("Identifiants invalides !");
+    console.error("Error during the connection:", error);
+    alert("invalid logins!");
   }
 };
 
@@ -105,13 +105,13 @@ const register = async () => {
       password: password.value,
     });
 
-    alert("Compte créé avec succès !");
+    alert("Account created successfully !");
     email.value = "";
     password.value = "";
   } catch (error) {
-    console.error("Erreur lors de l'inscription :", error);
+    console.error("Registration error :", error);
 
-    const errorMessage = error.response?.data?.message || "Erreur lors de la création du compte !";
+    const errorMessage = error.response?.data?.message || "Account creation error !";
     alert(errorMessage);
   }
 };
@@ -127,7 +127,7 @@ const logout = () => {
   email.value = "";
   password.value = "";
 
-  alert("Déconnexion réussie !");
+  alert("Successful disconnection !");
   router.push("/");
 };
 

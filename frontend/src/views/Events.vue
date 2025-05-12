@@ -109,7 +109,7 @@ onMounted(() => {
   grid-template-columns: repeat(
     auto-fill,
     minmax(300px, 1fr)
-  ); /* Pour une grille réactive */
+  ); 
   gap: 20px;
   margin-top: 100px;
 }
