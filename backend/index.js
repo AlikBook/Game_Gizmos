@@ -175,7 +175,7 @@ app.post("/register", (req, res) => {
         }
 
         return res.status(500).json({ message: "Erreur serveur" });
-
+      }
       try {
         const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -201,6 +201,7 @@ app.post("/register", (req, res) => {
 
       res.status(201).json({ message: "Utilisateur enregistré avec succès" });
     }
+
   );
 });
 

@@ -6,7 +6,10 @@
         <h2>{{ event.event_name }}</h2>
         <p>{{ event.event_description }}</p>
         <p>Number participants: {{ event.nb_participants }}</p>
-        <p>From {{ event.min_participants }} to {{ event.max_participants }}</p>
+        <p>
+          From {{ event.min_participants }} to
+          {{ event.max_participants }} participants
+        </p>
         <p>Game ID: {{ event.game_id }}</p>
         <p>Event ID: {{ event.event_id }}</p>
         <button @click="joinEvent(event.event_id)">Join</button>
