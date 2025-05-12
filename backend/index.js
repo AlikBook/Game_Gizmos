@@ -110,7 +110,6 @@ app.get("/events", (req, res) => {
   });
 });
 
-
 app.post("/create-event", (req, res) => {
   const { event_name, event_description, max_participants, min_participants, game_id } = req.body;
 
@@ -287,3 +286,4 @@ app.post("/join_event/:event_id", (req, res) => {
     res.json({ message: "Successfully joined the event", results });
   });
 });
+
