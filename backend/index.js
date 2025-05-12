@@ -110,6 +110,21 @@ app.get("/events", (req, res) => {
   });
 });
 
+app.get("/upcoming_events", (req, res) => {
+  const sql = "SELECT * FROM UpcomingEvents";
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.error(
+        "Erreur lors de la récupération des événements à venir:",
+        err
+      );
+      res.status(500).send("Erreur serveur");
+    } else {
+      res.json(results);
+    }
+  });
+});
+
 app.post("/create-event", (req, res) => {
   const { event_name, event_description, max_participants, min_participants, game_id } = req.body;
 
@@ -201,4 +216,25 @@ app.post("/login", (req, res) => {
       });
     }
   );
+});
+
+app.post("/join_event/:event_id", (req, res) => {
+  const eventId = req.params.event_id;
+  const { user_id, user_mail } = req.body;
+
+  if (!user_id || !user_mail) {
+    return res.status(400).json({ message: "User ID and email are required" });
+  }
+  const sql = "CALL JoinEvent(?, ?, ?)";
+  connection.query(sql, [eventId, user_id, user_mail], (err, results) => {
+    if (err) {
+      if (err.sqlState === "45000") {
+        return res.status(400).json({ message: err.sqlMessage });
+      }
+      console.error("Error joining event:", err);
+      return res.status(500).json({ message: "Server error" });
+    }
+
+    res.json({ message: "Successfully joined the event", results });
+  });
 });
