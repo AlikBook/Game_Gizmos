@@ -397,6 +397,7 @@ JOIN Categories c ON h.category_id = c.category_id;
 CREATE VIEW UserRatingHistory AS
 SELECT 
     u.user_mail,
+    g.game_id,
     g.game_name,
     r.Rate,
     r.Comments,
@@ -423,6 +424,7 @@ SELECT
 	g.game_id,
     g.game_name,
     g.publication_year,
+    g.game_description,
     a.artist_name,
     d.designer_name,
     p.publisher_name
@@ -461,19 +463,19 @@ DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE CreateEvent(
-	IN p_event_id INT,
 	IN p_event_name VARCHAR(50),
 	IN p_event_description TEXT,
 	IN p_nb_participants INT,
 	IN p_max_participants INT,
-	IN p_min_participants VARCHAR(50),
+	IN p_min_participants INT,
 	IN p_game_id VARCHAR(50)
 )
 BEGIN
-	INSERT INTO Events (event_id, event_name, event_description, nb_participants, max_participants, min_participants, game_id)
-	VALUES (p_event_id, p_event_name, p_event_description, p_nb_participants, p_max_participants, p_min_participants, p_game_id);
+	INSERT INTO Events (event_name, event_description, nb_participants, max_participants, min_participants, game_id)
+	VALUES (p_event_name, p_event_description, p_nb_participants, p_max_participants, p_min_participants, p_game_id);
 END $$
 DELIMITER ;
+
 
 DELIMITER $$
 CREATE PROCEDURE JoinEvent(
@@ -507,11 +509,9 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE GetGameRatings(IN p_game_id VARCHAR(50))
 BEGIN
-	SELECT r.Rate, r.Comments, u.user_mail
-	FROM Rates r
-	JOIN Users u
-    	ON r.user_id = u.user_id AND r.user_mail = u.user_mail
-	WHERE r.game_id = p_game_id;
+    SELECT user_mail, game_name, Rate, Comments, id_rate
+    FROM UserRatingHistory
+    WHERE game_id = p_game_id;
 END $$
 DELIMITER ;
 

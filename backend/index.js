@@ -14,6 +14,7 @@ app.use(express.json());
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
+  //port: process.env.DB_PORT,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
 });
@@ -119,45 +120,32 @@ app.post("/create-event", (req, res) => {
     game_id,
   } = req.body;
 
+
   if (
     !event_name ||
     !event_description ||
-    !max_participants ||
-    !min_participants ||
+    max_participants == null ||
+    min_participants == null ||
     !game_id
   ) {
-    return res.status(400).json({ message: "All fields are required" });
+    return res.status(400).json({ message: "Missing required fields" });
   }
 
-  const sql = `
-    INSERT INTO Events (event_name, event_description, nb_participants, max_participants, min_participants, game_id)
-    VALUES (?, ?, 0, ?, ?, ?)
-  `;
-
+  const sql = "CALL CreateEvent(?, ?, 0, ?, ?, ?)";
   connection.query(
     sql,
-    [
-      event_name,
-      event_description,
-      max_participants,
-      min_participants,
-      game_id,
-    ],
+    [event_name, event_description, max_participants, min_participants, game_id],
     (err, result) => {
       if (err) {
         console.error("Error creating event:", err);
-        return res.status(500).json({ message: "Server error" });
+        return res.status(500).json({ message: "Server error", details: err.message });
       }
 
-      res
-        .status(201)
-        .json({
-          message: "Event created successfully",
-          eventId: result.insertId,
-        });
+      res.status(201).json({ message: "Event created successfully" });
     }
   );
 });
+
 app.get("/upcoming_events", (req, res) => {
   const sql = "SELECT * FROM UpcomingEvents";
   connection.query(sql, (err, results) => {
@@ -246,16 +234,33 @@ app.post("/join_event/:event_id", (req, res) => {
   if (!user_id || !user_mail) {
     return res.status(400).json({ message: "User ID and email are required" });
   }
-  const sql = "CALL JoinEvent(?, ?, ?)";
-  connection.query(sql, [eventId, user_id, user_mail], (err, results) => {
-    if (err) {
-      if (err.sqlState === "45000") {
-        return res.status(400).json({ message: err.sqlMessage });
-      }
-      console.error("Error joining event:", err);
+
+  const checkSql = `
+    SELECT * FROM Participates 
+    WHERE user_id = ? AND user_mail = ? AND event_id = ?
+  `;
+
+  connection.query(checkSql, [user_id, user_mail, eventId], (checkErr, checkResults) => {
+    if (checkErr) {
+      console.error("Error checking participation:", checkErr);
       return res.status(500).json({ message: "Server error" });
     }
 
-    res.json({ message: "Successfully joined the event", results });
+    if (checkResults.length > 0) {
+      return res.status(400).json({ message: "User already joined this event" });
+    }
+
+    const joinSql = "CALL JoinEvent(?, ?, ?)";
+    connection.query(joinSql, [eventId, user_id, user_mail], (err, results) => {
+      if (err) {
+        if (err.sqlState === "45000") {
+          return res.status(400).json({ message: err.sqlMessage });
+        }
+        
+        return res.status(500).json({ message: "Server error" });
+      }
+
+      res.json({ message: "Successfully joined the event", results });
+    });
   });
 });

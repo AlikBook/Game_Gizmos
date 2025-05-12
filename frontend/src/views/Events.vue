@@ -41,12 +41,11 @@ const user_id = ref(localStorage.getItem("user_id"));
 const user_mail = ref(localStorage.getItem("username"));
 
 const joinEvent = async (eventId) => {
-  console.log(user_id.value, user_mail.value);
-
   if (!user_id.value || !user_mail.value) {
     alert("Please log in to join an event.");
     return;
   }
+
   try {
     const response = await fetch(
       `http://localhost:3000/join_event/${eventId}`,
@@ -56,22 +55,27 @@ const joinEvent = async (eventId) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          event_id: eventId,
           user_id: user_id.value,
           user_mail: user_mail.value,
         }),
       }
     );
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
+
     const data = await response.json();
+
+    if (!response.ok) {
+      // Show server-provided error message
+      throw new Error(data.message || "Could not join event.");
+    }
+
     console.log("Joined event:", data);
     alert("You have successfully joined the event!");
   } catch (error) {
     console.error("Error joining event:", error);
+    alert(`Could not join event: ${error.message}`);
   }
 };
+
 
 const fetchdata = async () => {
   try {
