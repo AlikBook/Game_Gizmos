@@ -110,11 +110,22 @@ app.get("/events", (req, res) => {
   });
 });
 
-
 app.post("/create-event", (req, res) => {
-  const { event_name, event_description, max_participants, min_participants, game_id } = req.body;
+  const {
+    event_name,
+    event_description,
+    max_participants,
+    min_participants,
+    game_id,
+  } = req.body;
 
-  if (!event_name || !event_description || !max_participants || !min_participants || !game_id) {
+  if (
+    !event_name ||
+    !event_description ||
+    !max_participants ||
+    !min_participants ||
+    !game_id
+  ) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
@@ -125,17 +136,28 @@ app.post("/create-event", (req, res) => {
 
   connection.query(
     sql,
-    [event_name, event_description, max_participants, min_participants, game_id],
+    [
+      event_name,
+      event_description,
+      max_participants,
+      min_participants,
+      game_id,
+    ],
     (err, result) => {
       if (err) {
         console.error("Error creating event:", err);
         return res.status(500).json({ message: "Server error" });
       }
 
-      res.status(201).json({ message: "Event created successfully", eventId: result.insertId });
+      res
+        .status(201)
+        .json({
+          message: "Event created successfully",
+          eventId: result.insertId,
+        });
     }
   );
-
+});
 app.get("/upcoming_events", (req, res) => {
   const sql = "SELECT * FROM UpcomingEvents";
   connection.query(sql, (err, results) => {
@@ -149,7 +171,6 @@ app.get("/upcoming_events", (req, res) => {
       res.json(results);
     }
   });
-
 });
 
 app.listen(PORT, () => {
@@ -171,37 +192,13 @@ app.post("/register", (req, res) => {
         console.error("Erreur lors de l'enregistrement :", err);
 
         if (err.code === "ER_SIGNAL_EXCEPTION" || err.sqlState === "45000") {
-          return res.status(400).json({ message: err.sqlMessage }); 
+          return res.status(400).json({ message: err.sqlMessage });
         }
 
         return res.status(500).json({ message: "Erreur serveur" });
       }
-      try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Insérer le nouvel utilisateur dans la base de données
-        connection.query(
-          "INSERT INTO Users (user_mail, password) VALUES (?, ?)",
-          [email, hashedPassword],
-          (err, results) => {
-            if (err) {
-              console.error("Erreur lors de l'enregistrement :", err);
-              return res.status(500).json({ message: "Erreur serveur" });
-            }
-            res
-              .status(201)
-              .json({ message: "Utilisateur enregistré avec succès" });
-          }
-        );
-      } catch (hashError) {
-        console.error("Erreur lors du hashage du mot de passe :", hashError);
-        res.status(500).json({ message: "Erreur serveur" });
-
-      }
-
       res.status(201).json({ message: "Utilisateur enregistré avec succès" });
     }
-
   );
 });
 
@@ -222,34 +219,8 @@ app.post("/login", (req, res) => {
 
       const user = results[0];
 
-
       if (password !== user.password) {
         return res.status(401).json({ message: "Identifiants invalides" });
-
-        if (!match) {
-          return res.status(401).json({ message: "Identifiants invalides" });
-        }
-
-        // Générer un token JWT
-        const token = jwt.sign(
-          { user_id: user.user_id, email: user.user_mail },
-          process.env.JWT_SECRET,
-          { expiresIn: "1d" }
-        );
-
-        res.json({
-          token,
-          user_id: user.user_id, // ✅ send the user_id from DB
-          email: user.user_mail,
-          message: "Connexion réussie",
-        });
-      } catch (compareError) {
-        console.error(
-          "Erreur lors de la comparaison des mots de passe :",
-          compareError
-        );
-        res.status(500).json({ message: "Erreur serveur" });
-
       }
 
       const token = jwt.sign(

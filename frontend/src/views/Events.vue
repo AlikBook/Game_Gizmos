@@ -137,4 +137,14 @@ onMounted(() => {
   font-weight: bold;
   color: #333;
 }
+
+.event-card button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 </style>
