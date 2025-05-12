@@ -4,7 +4,6 @@
     <p>Explore our collection of games.</p>
     <FilterButton @showFilter="handleFilterToggle" />
     <FiltersList v-if="showFilters" @filterData="handleFilterData" />
-    <p>{{ appliedFilters }}</p>
     <div class="game-list">
       <router-link
         v-for="game in filteredData"
