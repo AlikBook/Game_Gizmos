@@ -264,3 +264,47 @@ app.post("/join_event/:event_id", (req, res) => {
     });
   });
 });
+
+
+app.post("/leave_event/:event_id", (req, res) => {
+  const eventId = req.params.event_id;
+  const { user_id, user_mail } = req.body;
+
+  if (!user_id || !user_mail) {
+    return res.status(400).json({ message: "User ID and email are required" });
+  }
+
+  const sql = "CALL LeaveEvent(?, ?, ?)"; // Assuming your stored procedure takes these 3 params
+
+  connection.query(sql, [eventId, user_id, user_mail], (err, result) => {
+    if (err) {
+      console.error("Error leaving event:", err);
+      return res.status(500).json({ message: "Server error" });
+    }
+
+    res.json({ message: "Successfully left the event" });
+  });
+});
+
+app.get("/user_events", (req, res) => {
+  const { user_id, user_mail } = req.query;
+
+  if (!user_id || !user_mail) {
+    return res.status(400).json({ message: "Missing user ID or email" });
+  }
+
+  const sql = `
+    SELECT event_id FROM Participates
+    WHERE user_id = ? AND user_mail = ?
+  `;
+
+  connection.query(sql, [user_id, user_mail], (err, results) => {
+    if (err) {
+      console.error("Error fetching user events:", err);
+      return res.status(500).json({ message: "Server error" });
+    }
+
+    res.json(results);
+  });
+});
+;
