@@ -208,15 +208,12 @@ VALUES
     'https://cf.geekdo-images.com/JUAUWaVUzeBgzirhZNmHHw__micro/img/tdHLiMYfi-KTy89sGBGZVeE9ts0=/fit-in/64x64/filters:strip_icc()/pic4254509.jpg',
     '/boardgame/237182/root',
     'Root is a game of adventure and war in which 2 to 4 (1 to 6 with the Riverfolk Expansion) players compete for control of a vast wilderness.');
--- 1) Users
+    
 INSERT INTO Users (user_id, user_mail, password) VALUES
   (1, 'alice@example.com', 'password123'),
   (2, 'bob@example.com',   'securepass'),
   (3, 'carol@example.com', 'qwerty!@#');
 
-
-
--- 3) Mechanics
 INSERT INTO Mechanics (mechanic_id, mechanic_name) VALUES
   (1, 'Card Drafting'),
   (2, 'Dice Rolling'),
@@ -224,7 +221,6 @@ INSERT INTO Mechanics (mechanic_id, mechanic_name) VALUES
   (4, 'Area Control'),
   (5, 'Set Collection');
 
--- 4) Categories
 INSERT INTO Categories (category_id, category_name, category_description) VALUES
   (1, 'Strategy',  'Games involving strategic decision-making.'),
   (2, 'Family',    'Lightweight games for all ages.'),
@@ -232,25 +228,21 @@ INSERT INTO Categories (category_id, category_name, category_description) VALUES
   (4, 'Economic',  'Focus on money and resource management.'),
   (5, 'Thematic',  'Heavily story- or theme-driven games.');
 
--- 5) Designers
 INSERT INTO Designers (designer_id, designer_name) VALUES
   (1, 'Reiner Knizia'),
   (2, 'Uwe Rosenberg'),
   (3, 'Elizabeth Hargrave');
 
--- 6) Publishers
 INSERT INTO Publishers (publisher_id, publisher_name) VALUES
   (1, 'Days of Wonder'),
   (2, 'Z-Man Games'),
   (3, 'Fantasy Flight Games');
 
--- 7) Artists
 INSERT INTO Artists (artist_id, artist_name) VALUES
   (1, 'Michael Menzel'),
   (2, 'Vincent Dutrait'),
   (3, 'Naomi Robinson');
 
--- 8) Has (game–mechanic links)
 INSERT INTO Has (game_id, mechanic_id) VALUES
   ('30549', 1), ('30549', 4),
   ('822',   5), ('822',   3),
@@ -268,7 +260,6 @@ INSERT INTO Has (game_id, mechanic_id) VALUES
   ('204680', 2),
   ('237182', 4);
 
--- 9) Has3 (game–category links)
 INSERT INTO Has3 (game_id, category_id) VALUES
   ('30549', 2),  ('30549', 1),
   ('822',    2),  ('822',    3),
@@ -286,7 +277,6 @@ INSERT INTO Has3 (game_id, category_id) VALUES
   ('204680', 3),
   ('237182', 1);
 
--- 10) WorksOn (game–designer links)
 INSERT INTO WorksOn (game_id, designer_id) VALUES
   ('30549', 3),
   ('822',   2),
@@ -304,7 +294,6 @@ INSERT INTO WorksOn (game_id, designer_id) VALUES
   ('204680',1),
   ('237182',2);
 
--- 11) WorksOn2 (game–publisher links)
 INSERT INTO WorksOn2 (game_id, publisher_id) VALUES
   ('30549', 2),
   ('822',   2),
@@ -322,7 +311,6 @@ INSERT INTO WorksOn2 (game_id, publisher_id) VALUES
   ('204680',3),
   ('237182',1);
 
--- 12) WorksOn3 (game–artist links)
 INSERT INTO WorksOn3 (game_id, artist_id) VALUES
   ('30549', 1),
   ('822',   3),
@@ -340,7 +328,6 @@ INSERT INTO WorksOn3 (game_id, artist_id) VALUES
   ('204680',3),
   ('237182',1);
 
--- 13) Expansions (original + two batches)
 INSERT INTO Expansions (expansion_id, expansion_name, expansion_description, game_id) VALUES
   (101, 'Expansion 1',               'Expansion description 1',                        '30549'),
   (102, 'Expansion 2',               'Expansion description 2',                        '822'),
@@ -358,7 +345,6 @@ INSERT INTO Expansions (expansion_id, expansion_name, expansion_description, gam
   (114, 'Burrows & Badgers: Home Turf','Ajout de nouveaux scénarios et cartes.',                       '204680'),
   (115, 'Root: The Riverfolk Expansion','Nouvel ordre des Riverfolk et module de commerce.',            '237182');
 
--- 14) Events
 INSERT INTO Events (event_id, event_name, event_description, nb_participants, max_participants, min_participants, game_id, event_date) VALUES
   (201, 'Event 1', 'Description for event 1', 11, 21, '2', '30549', '2025-05-25'),
   (202, 'Event 2', 'Description for event 2', 12, 22, '2', '822', '2025-05-30'),
@@ -366,7 +352,6 @@ INSERT INTO Events (event_id, event_name, event_description, nb_participants, ma
   (204, 'Event 4', 'Description for event 4', 14, 24, '2', '68448', '2025-08-12'),
   (205, 'Event 5', 'Description for event 5', 15, 25, '2', '36218', '2025-09-27');
 
--- 15) Participates
 INSERT INTO Participates (user_id, user_mail, event_id) VALUES
   (1, 'alice@example.com', 201), (2, 'bob@example.com', 201), (3, 'carol@example.com', 201),
   (1, 'alice@example.com', 202), (2, 'bob@example.com', 202), (3, 'carol@example.com', 202),
@@ -383,17 +368,6 @@ CREATE INDEX idx_has_mechanic_id ON Has(mechanic_id);
 CREATE INDEX idx_workson_designer_id ON WorksOn(designer_id);
 CREATE INDEX idx_categories_category_name ON Categories(category_name);
 
-CREATE VIEW AvailableGames AS
-SELECT 
-    g.game_id,
-    g.game_name,
-    g.publication_year,
-    c.category_name AS category,
-    g.game_image,
-    g.game_url
-FROM Games g
-JOIN Has3 h ON g.game_id = h.game_id
-JOIN Categories c ON h.category_id = c.category_id;
 
 CREATE VIEW UserRatingHistory AS
 SELECT 
@@ -455,64 +429,106 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
+
 CREATE PROCEDURE AddRating(
-	IN p_rate DECIMAL(15,2),
-	IN p_comments TEXT,
-	IN p_game_id VARCHAR(50),
-	IN p_user_id INT,
-	IN p_user_mail VARCHAR(50)
+    IN p_rate DECIMAL(15,2),
+    IN p_comments TEXT,
+    IN p_game_id VARCHAR(50),
+    IN p_user_id INT,
+    IN p_user_mail VARCHAR(50)
 )
 BEGIN
-	INSERT INTO Rates (Rate, Comments, game_id, user_id, user_mail)
-	VALUES (p_rate, p_comments, p_game_id, p_user_id, p_user_mail);
-END $$
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Failed to add rating';
+    END;
+    START TRANSACTION;
+    INSERT INTO Rates (Rate, Comments, game_id, user_id, user_mail)
+    VALUES (p_rate, p_comments, p_game_id, p_user_id, p_user_mail);
+    COMMIT;
+END$$
 DELIMITER ;
 
+
 DELIMITER $$
+
 CREATE PROCEDURE CreateEvent(
-	IN p_event_name VARCHAR(50),
-	IN p_event_description TEXT,
-	IN p_nb_participants INT,
-	IN p_max_participants INT,
-	IN p_min_participants INT,
-	IN p_game_id VARCHAR(50),
+    IN p_event_name VARCHAR(50),
+    IN p_event_description TEXT,
+    IN p_nb_participants INT,
+    IN p_max_participants INT,
+    IN p_min_participants INT,
+    IN p_game_id VARCHAR(50),
     IN p_event_date DATE
 )
 BEGIN
-	INSERT INTO Events (event_name, event_description, nb_participants, max_participants, min_participants, game_id, event_date)
-	VALUES (p_event_name, p_event_description, p_nb_participants, p_max_participants, p_min_participants, p_game_id, p_event_date);
-END $$
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Failed to create event';
+    END;
+
+    START TRANSACTION;
+
+    INSERT INTO Events (
+        event_name, event_description, nb_participants,
+        max_participants, min_participants, game_id, event_date
+    )
+    VALUES (
+        p_event_name, p_event_description, p_nb_participants,
+        p_max_participants, p_min_participants, p_game_id, p_event_date
+    );
+
+    COMMIT;
+END$$
+
 DELIMITER ;
+
 
 
 DELIMITER $$
+
 CREATE PROCEDURE JoinEvent(
-	IN p_event_id INT,
-	IN p_user_id INT,
-	IN p_user_mail VARCHAR(50)
+    IN p_event_id INT,
+    IN p_user_id INT,
+    IN p_user_mail VARCHAR(50)
 )
 BEGIN
-	DECLARE current_count INT;
-	DECLARE max_count INT;
+    DECLARE current_count INT;
+    DECLARE max_count INT;
 
-	SELECT COUNT(*) INTO current_count FROM Participates
-	WHERE event_id = p_event_id;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Failed to join event';
+    END;
 
-	SELECT max_participants INTO max_count FROM Events
-	WHERE event_id = p_event_id;
+    START TRANSACTION;
 
-	IF current_count < max_count THEN
-    	INSERT INTO Participates (event_id, user_id, user_mail)
-    	VALUES (p_event_id, p_user_id, p_user_mail);
+    SELECT COUNT(*) INTO current_count FROM Participates
+    WHERE event_id = p_event_id;
 
-    	UPDATE Events
-    	SET nb_participants = nb_participants + 1
-    	WHERE event_id = p_event_id;
-	ELSE
-    	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Event is full';
-	END IF;
-END $$
+    SELECT max_participants INTO max_count FROM Events
+    WHERE event_id = p_event_id;
+
+    IF current_count < max_count THEN
+        INSERT INTO Participates (event_id, user_id, user_mail)
+        VALUES (p_event_id, p_user_id, p_user_mail);
+
+        UPDATE Events
+        SET nb_participants = nb_participants + 1
+        WHERE event_id = p_event_id;
+    ELSE
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Event is full';
+    END IF;
+
+    COMMIT;
+END$$
+
 DELIMITER ;
+
 
 DELIMITER $$
 CREATE PROCEDURE GetGameRatings(IN p_game_id VARCHAR(50))
@@ -523,14 +539,38 @@ BEGIN
 END $$
 DELIMITER ;
 
+
+
 DELIMITER $$
-CREATE PROCEDURE ListGameEvents(IN p_game_id VARCHAR(50))
+
+CREATE PROCEDURE LeaveEvent(
+    IN p_event_id INT,
+    IN p_user_id INT,
+    IN p_user_mail VARCHAR(255)
+)
 BEGIN
-	SELECT * FROM Events
-	WHERE game_id = p_game_id
-	ORDER BY event_name;
-END $$
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Failed to leave event';
+    END;
+
+    START TRANSACTION;
+
+    DELETE FROM Participates
+    WHERE event_id = p_event_id
+      AND user_id = p_user_id
+      AND user_mail = p_user_mail;
+
+    UPDATE Events
+    SET nb_participants = GREATEST(nb_participants - 1, 0)
+    WHERE event_id = p_event_id;
+
+    COMMIT;
+END$$
+
 DELIMITER ;
+
 
 delimiter //
 create trigger update_avg_rate after insert on Rates
@@ -575,9 +615,8 @@ end;
 //
 delimiter ;
 
--- 2) Rates (original + first batch + second batch)
 INSERT INTO Rates (game_id, user_id, user_mail, Comments, Rate) VALUES
-  -- Originals
+
   ('30549', 1, 'alice@example.com', 'User 1 enjoyed game 30549', 6.5),
   ('30549', 2, 'bob@example.com',   'User 2 enjoyed game 30549', 7.0),
   ('30549', 3, 'carol@example.com', 'User 3 enjoyed game 30549', 7.5),
@@ -594,7 +633,6 @@ INSERT INTO Rates (game_id, user_id, user_mail, Comments, Rate) VALUES
   ('36218', 2, 'bob@example.com',   'User 2 enjoyed game 36218', 7.0),
   ('36218', 3, 'carol@example.com', 'User 3 enjoyed game 36218', 7.5),
 
-  -- Batch 1 (Terraforming Mars, Azul, Wingspan, Ticket to Ride, Splendor)
   ('167791', 1, 'alice@example.com', 'Stratégie très riche, un de mes préférés.',             8.20),
   ('167791', 2, 'bob@example.com',   'Parties un peu longues mais super theme.',            8.50),
   ('167791', 3, 'carol@example.com', 'Très immersif, cartes variées. À jouer souvent.',     8.00),
@@ -611,7 +649,6 @@ INSERT INTO Rates (game_id, user_id, user_mail, Comments, Rate) VALUES
   ('148228', 2, 'bob@example.com',   'Très bon jeu de collecte de ressources.',             7.80),
   ('148228', 3, 'carol@example.com', 'Idéal en famille, rapide à installer.',               7.40),
 
-  -- Batch 2 (Codenames, Gloomhaven, Pandemic Legacy, Burrows and Badgers, Root)
   ('178900', 1, 'alice@example.com', 'Super jeu d’ambiance, idéal en groupe.',           7.90),
   ('178900', 2, 'bob@example.com',   'Mécanique originale, très amusant.',               8.10),
   ('178900', 3, 'carol@example.com', 'Facile à expliquer, parties rapides.',             7.80),
@@ -628,24 +665,3 @@ INSERT INTO Rates (game_id, user_id, user_mail, Comments, Rate) VALUES
   ('237182', 2, 'bob@example.com',   'Très bon équilibre des factions.',                 8.50),
   ('237182', 3, 'carol@example.com', 'Parties tendues et stratégiques.',                8.20);
   
-  DELIMITER $$
-
-CREATE PROCEDURE LeaveEvent (
-    IN p_event_id INT,
-    IN p_user_id INT,
-    IN p_user_mail VARCHAR(255)
-)
-BEGIN
-
-    DELETE FROM Participates
-    WHERE event_id = p_event_id
-      AND user_id = p_user_id
-      AND user_mail = p_user_mail;
-
-    
-    UPDATE Events
-    SET nb_participants = GREATEST(nb_participants - 1, 0)
-    WHERE event_id = p_event_id;
-END$$
-
-DELIMITER ;

@@ -22,7 +22,7 @@ body, html, #app {
 }
 
 .main-content {
-  padding-top: 100px; 
+  margin-top: 100px;
   padding-bottom: 200px; 
   min-height: calc(100vh - 200px); 
 }

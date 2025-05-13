@@ -274,17 +274,21 @@ header {
   justify-content: center;
   align-items: center;
   z-index: 100;
+  padding-top: 100px;
 }
 
 .modal-content {
-  background: linear-gradient(135deg, #ffffff, #f9f9f9); 
-  padding: 30px;
+  background: linear-gradient(135deg, #ffffff, #f9f9f9);
+  padding: 20px;
   border-radius: 12px;
-  width: 500px;
-  max-width: 90%; 
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); 
-  animation: fadeIn 0.3s ease-out; 
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease-out;
 }
+
 
 .modal-content h2 {
   text-align: center;
