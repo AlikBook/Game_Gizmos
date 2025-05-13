@@ -120,7 +120,6 @@ app.post("/create-event", (req, res) => {
     game_id,
   } = req.body;
 
-
   if (
     !event_name ||
     !event_description ||
@@ -134,11 +133,19 @@ app.post("/create-event", (req, res) => {
   const sql = "CALL CreateEvent(?, ?, 0, ?, ?, ?)";
   connection.query(
     sql,
-    [event_name, event_description, max_participants, min_participants, game_id],
+    [
+      event_name,
+      event_description,
+      max_participants,
+      min_participants,
+      game_id,
+    ],
     (err, result) => {
       if (err) {
         console.error("Error creating event:", err);
-        return res.status(500).json({ message: "Server error", details: err.message });
+        return res
+          .status(500)
+          .json({ message: "Server error", details: err.message });
       }
 
       res.status(201).json({ message: "Event created successfully" });
@@ -240,27 +247,79 @@ app.post("/join_event/:event_id", (req, res) => {
     WHERE user_id = ? AND user_mail = ? AND event_id = ?
   `;
 
-  connection.query(checkSql, [user_id, user_mail, eventId], (checkErr, checkResults) => {
-    if (checkErr) {
-      console.error("Error checking participation:", checkErr);
-      return res.status(500).json({ message: "Server error" });
-    }
-
-    if (checkResults.length > 0) {
-      return res.status(400).json({ message: "User already joined this event" });
-    }
-
-    const joinSql = "CALL JoinEvent(?, ?, ?)";
-    connection.query(joinSql, [eventId, user_id, user_mail], (err, results) => {
-      if (err) {
-        if (err.sqlState === "45000") {
-          return res.status(400).json({ message: err.sqlMessage });
-        }
-        
+  connection.query(
+    checkSql,
+    [user_id, user_mail, eventId],
+    (checkErr, checkResults) => {
+      if (checkErr) {
+        console.error("Error checking participation:", checkErr);
         return res.status(500).json({ message: "Server error" });
       }
 
-      res.json({ message: "Successfully joined the event", results });
-    });
+      if (checkResults.length > 0) {
+        return res
+          .status(400)
+          .json({ message: "User already joined this event" });
+      }
+
+      const joinSql = "CALL JoinEvent(?, ?, ?)";
+      connection.query(
+        joinSql,
+        [eventId, user_id, user_mail],
+        (err, results) => {
+          if (err) {
+            if (err.sqlState === "45000") {
+              return res.status(400).json({ message: err.sqlMessage });
+            }
+
+            return res.status(500).json({ message: "Server error" });
+          }
+
+          res.json({ message: "Successfully joined the event", results });
+        }
+      );
+    }
+  );
+});
+
+app.post("/leave_event/:event_id", (req, res) => {
+  const eventId = req.params.event_id;
+  const { user_id, user_mail } = req.body;
+
+  if (!user_id || !user_mail) {
+    return res.status(400).json({ message: "User ID and email are required" });
+  }
+
+  const sql = "CALL LeaveEvent(?, ?, ?)"; // Assuming your stored procedure takes these 3 params
+
+  connection.query(sql, [eventId, user_id, user_mail], (err, result) => {
+    if (err) {
+      console.error("Error leaving event:", err);
+      return res.status(500).json({ message: "Server error" });
+    }
+
+    res.json({ message: "Successfully left the event" });
+  });
+});
+
+app.get("/user_events", (req, res) => {
+  const { user_id, user_mail } = req.query;
+
+  if (!user_id || !user_mail) {
+    return res.status(400).json({ message: "Missing user ID or email" });
+  }
+
+  const sql = `
+    SELECT event_id FROM Participates
+    WHERE user_id = ? AND user_mail = ?
+  `;
+
+  connection.query(sql, [user_id, user_mail], (err, results) => {
+    if (err) {
+      console.error("Error fetching user events:", err);
+      return res.status(500).json({ message: "Server error" });
+    }
+
+    res.json(results);
   });
 });

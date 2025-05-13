@@ -414,11 +414,15 @@ SELECT
     e.event_id,
     COUNT(p.event_id) AS current_participants,
     e.max_participants, 
-    e.event_date
+    e.event_date, 
+    g.game_id,
+    g.game_name,
+    g.game_image
 FROM Events e
 LEFT JOIN Participates p ON e.event_id = p.event_id
+LEFT JOIN Games g ON e.game_id = g.game_id
 WHERE e.event_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 1 MONTH)
-GROUP BY e.event_id, e.event_name, e.event_description, e.max_participants;
+GROUP BY e.event_id, e.event_name, e.event_description, e.event_date, e.max_participants, g.game_id, g.game_name, g.game_image;
 
 CREATE VIEW GameDetails AS
 SELECT 
@@ -623,3 +627,25 @@ INSERT INTO Rates (game_id, user_id, user_mail, Comments, Rate) VALUES
   ('237182', 1, 'alice@example.com', 'Asymétrie parfaite, top design.',                 8.30),
   ('237182', 2, 'bob@example.com',   'Très bon équilibre des factions.',                 8.50),
   ('237182', 3, 'carol@example.com', 'Parties tendues et stratégiques.',                8.20);
+  
+  DELIMITER $$
+
+CREATE PROCEDURE LeaveEvent (
+    IN p_event_id INT,
+    IN p_user_id INT,
+    IN p_user_mail VARCHAR(255)
+)
+BEGIN
+
+    DELETE FROM Participates
+    WHERE event_id = p_event_id
+      AND user_id = p_user_id
+      AND user_mail = p_user_mail;
+
+    
+    UPDATE Events
+    SET nb_participants = GREATEST(nb_participants - 1, 0)
+    WHERE event_id = p_event_id;
+END$$
+
+DELIMITER ;
