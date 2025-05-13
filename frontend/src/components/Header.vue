@@ -50,6 +50,10 @@
           <label for="gameId">Game ID:</label>
           <input v-model="gameId" id="gameId" type="text" required />
         </div>
+        <div>
+          <label for="date">Date:</label>
+          <input v-model="date" id="date" type="date" required />
+        </div>
         <button type="submit" class="btn btn-secondary">Create Event</button>
         <button @click="closeModal" class="btn btn-logout">Cancel</button>
       </form>
@@ -73,6 +77,7 @@ const eventDescription = ref("");
 const maxParticipants = ref(0);
 const minParticipants = ref(0);
 const gameId = ref("");
+const date = ref("");
 
 const login = async () => {
   try {
@@ -147,6 +152,7 @@ const createEvent = async () => {
       max_participants: maxParticipants.value,
       min_participants: minParticipants.value,
       game_id: gameId.value,
+      date: date.value,
     });
 
     alert("Event created successfully!");
@@ -156,6 +162,7 @@ const createEvent = async () => {
     maxParticipants.value = 0;
     minParticipants.value = 0;
     gameId.value = "";
+    date.value = "";
   } catch (error) {
     console.error("Error creating event:", error);
     alert("Failed to create event.");

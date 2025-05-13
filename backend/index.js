@@ -118,6 +118,7 @@ app.post("/create-event", (req, res) => {
     max_participants,
     min_participants,
     game_id,
+    date
   } = req.body;
 
   if (
@@ -125,12 +126,13 @@ app.post("/create-event", (req, res) => {
     !event_description ||
     max_participants == null ||
     min_participants == null ||
-    !game_id
+    !game_id ||
+    !date
   ) {
     return res.status(400).json({ message: "Missing required fields" });
   }
 
-  const sql = "CALL CreateEvent(?, ?, 0, ?, ?, ?)";
+  const sql = "CALL CreateEvent(?, ?, 0, ?, ?, ?, ?)";
   connection.query(
     sql,
     [
@@ -139,6 +141,7 @@ app.post("/create-event", (req, res) => {
       max_participants,
       min_participants,
       game_id,
+      date,
     ],
     (err, result) => {
       if (err) {
