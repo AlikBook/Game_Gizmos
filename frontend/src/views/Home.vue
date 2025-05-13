@@ -65,10 +65,9 @@ const fetchTopGames = async () => {
 
 const fetchEvents = async () => {
   try {
-    const response = await fetch("http://localhost:3000/events");
+    const response = await fetch("http://localhost:3000/upcoming_events");
     const eventData = await response.json();
 
-   
     events.value = eventData.map(event => {
       const matchingGame = allGames.value.find(game => game.game_id === event.game_id);
       return {
@@ -78,9 +77,10 @@ const fetchEvents = async () => {
       };
     });
   } catch (error) {
-    console.error("Error fetching events:", error);
+    console.error("Error fetching upcoming events:", error);
   }
 };
+
 
 
 onMounted(async () => {
