@@ -12,6 +12,7 @@
         </p>
         <p>Game ID: {{ event.game_id }}</p>
         <p>Event ID: {{ event.event_id }}</p>
+        <p>Event Date: {{ formatDate(event.event_date) }}</p>
         <button @click="joinEvent(event.event_id)">Join</button>
       </div>
     </div>
@@ -26,6 +27,7 @@
           {{ event.max_participants }}
         </p>
         <p>Event ID : {{ event.event_id }}</p>
+        <p>Event Date: {{ formatDate(event.event_date) }}</p>
         <button @click="joinEvent(event.event_id)">Join</button>
       </div>
     </div>
@@ -74,6 +76,15 @@ const joinEvent = async (eventId) => {
     console.error("Error joining event:", error);
     alert(`Could not join event: ${error.message}`);
   }
+};
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("fr-FR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
 };
 
 const fetchdata = async () => {

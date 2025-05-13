@@ -68,6 +68,7 @@ CREATE TABLE Events(
    max_participants INT NOT NULL,
    min_participants INT,
    game_id VARCHAR(50) NOT NULL,
+   event_date DATE,
    PRIMARY KEY(event_id),
    FOREIGN KEY(game_id) REFERENCES Games(game_id)
 );
@@ -358,12 +359,12 @@ INSERT INTO Expansions (expansion_id, expansion_name, expansion_description, gam
   (115, 'Root: The Riverfolk Expansion','Nouvel ordre des Riverfolk et module de commerce.',            '237182');
 
 -- 14) Events
-INSERT INTO Events (event_id, event_name, event_description, nb_participants, max_participants, min_participants, game_id) VALUES
-  (201, 'Event 1', 'Description for event 1', 11, 21, '2', '30549'),
-  (202, 'Event 2', 'Description for event 2', 12, 22, '2', '822'),
-  (203, 'Event 3', 'Description for event 3', 13, 23, '2', '13'),
-  (204, 'Event 4', 'Description for event 4', 14, 24, '2', '68448'),
-  (205, 'Event 5', 'Description for event 5', 15, 25, '2', '36218');
+INSERT INTO Events (event_id, event_name, event_description, nb_participants, max_participants, min_participants, game_id, event_date) VALUES
+  (201, 'Event 1', 'Description for event 1', 11, 21, '2', '30549', '2025-05-25'),
+  (202, 'Event 2', 'Description for event 2', 12, 22, '2', '822', '2025-05-30'),
+  (203, 'Event 3', 'Description for event 3', 13, 23, '2', '13', '2025-06-24'),
+  (204, 'Event 4', 'Description for event 4', 14, 24, '2', '68448', '2025-08-12'),
+  (205, 'Event 5', 'Description for event 5', 15, 25, '2', '36218', '2025-09-27');
 
 -- 15) Participates
 INSERT INTO Participates (user_id, user_mail, event_id) VALUES
@@ -412,9 +413,11 @@ SELECT
     e.event_description,
     e.event_id,
     COUNT(p.event_id) AS current_participants,
-    e.max_participants
+    e.max_participants, 
+    e.event_date
 FROM Events e
 LEFT JOIN Participates p ON e.event_id = p.event_id
+WHERE e.event_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 1 MONTH)
 GROUP BY e.event_id, e.event_name, e.event_description, e.max_participants;
 
 CREATE VIEW GameDetails AS
@@ -468,11 +471,12 @@ CREATE PROCEDURE CreateEvent(
 	IN p_nb_participants INT,
 	IN p_max_participants INT,
 	IN p_min_participants INT,
-	IN p_game_id VARCHAR(50)
+	IN p_game_id VARCHAR(50),
+    IN p_event_date DATE
 )
 BEGIN
-	INSERT INTO Events (event_name, event_description, nb_participants, max_participants, min_participants, game_id)
-	VALUES (p_event_name, p_event_description, p_nb_participants, p_max_participants, p_min_participants, p_game_id);
+	INSERT INTO Events (event_name, event_description, nb_participants, max_participants, min_participants, game_id, event_date)
+	VALUES (p_event_name, p_event_description, p_nb_participants, p_max_participants, p_min_participants, p_game_id, p_event_date);
 END $$
 DELIMITER ;
 
