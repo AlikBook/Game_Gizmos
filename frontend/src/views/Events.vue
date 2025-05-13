@@ -5,7 +5,6 @@
       <div class="event-card" v-for="event in events" :key="event.event_id">
         <img :src="event.game_image" :alt="event.game_name" class="event-image" />
         <h2>{{ event.event_name }}</h2>
-<<<<<<< HEAD
         <div class="event-details">
           <p><strong>Description:</strong> {{ event.event_description }}</p>
           <p><strong>Participants:</strong> {{ event.nb_participants }}</p>
@@ -27,31 +26,6 @@
         >
           Leave
         </button>
-=======
-        <p>{{ event.event_description }}</p>
-        <p>Number participants: {{ event.nb_participants }}</p>
-        <p>
-          From {{ event.min_participants }} to
-          {{ event.max_participants }} participants
-        </p>
-        <p>Game ID: {{ event.game_id }}</p>
-        <p>Event ID: {{ event.event_id }}</p>
-        <button @click="joinEvent(event.event_id)">Join</button>
-      </div>
-    </div>
-
-    <h1 class="second_title">Upcoming events</h1>
-    <div class="events-list">
-      <div class="event-card" v-for="event in upcoming_events" :key="event.id">
-        <h2>{{ event.event_name }}</h2>
-        <p>{{ event.event_description }}</p>
-        <p>
-          Current Participants: {{ event.current_participants }} /
-          {{ event.max_participants }}
-        </p>
-        <p>Event ID : {{ event.event_id }}</p>
-        <button @click="joinEvent(event.event_id)">Join</button>
->>>>>>> 020d9952b3cb85f87006561d7cea7337f04a3e39
       </div>
     </div>
   </div>
@@ -91,11 +65,7 @@ const joinEvent = async (eventId) => {
   }
 };
 
-<<<<<<< HEAD
 const leaveEvent = async (eventId) => {
-=======
-const fetchdata = async () => {
->>>>>>> 020d9952b3cb85f87006561d7cea7337f04a3e39
   try {
     const response = await fetch(`http://localhost:3000/leave_event/${eventId}`, {
       method: "POST",
@@ -170,10 +140,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.second_title {
-  margin-top: 40px;
-}
-
 .events-container {
   padding: 20px;
   background-color: #f4f4f9;
@@ -181,15 +147,9 @@ onMounted(() => {
 
 .events-list {
   display: grid;
-<<<<<<< HEAD
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 24px;
   margin-top: 50px;
-=======
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
->>>>>>> 020d9952b3cb85f87006561d7cea7337f04a3e39
 }
 
 .event-card {
