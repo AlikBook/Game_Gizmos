@@ -80,10 +80,14 @@ onMounted(() => {
 
 <style scoped>
 .discover {
-  margin-top: 100px;
+  margin-top: 50px;
   padding: 20px;
-  text-align: center;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.discover h2,
+.discover p {
+  text-align: center;
 }
 
 h2 {

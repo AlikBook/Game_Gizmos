@@ -16,7 +16,7 @@
       </div>
     </div>
 
-    <h2>Upcoming events</h2>
+    <h1 class="second_title">Upcoming events</h1>
     <div class="events-list">
       <div class="event-card" v-for="event in upcoming_events" :key="event.id">
         <h2>{{ event.event_name }}</h2>
@@ -76,7 +76,6 @@ const joinEvent = async (eventId) => {
   }
 };
 
-
 const fetchdata = async () => {
   try {
     const response_events = await fetch("http://localhost:3000/events");
@@ -99,6 +98,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.second_title {
+  margin-top: 40px;
+}
+
 .events-container {
   padding: 20px;
   background-color: #f4f4f9;
@@ -106,12 +109,9 @@ onMounted(() => {
 
 .events-list {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(300px, 1fr)
-  ); 
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
-  margin-top: 100px;
+  margin-top: 20px;
 }
 
 .event-card {
