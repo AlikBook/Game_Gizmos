@@ -128,8 +128,14 @@
   justify-content: space-evenly;
   color: white;
   gap: 10px;
-  
+
 }
+
+.game_container_details img{
+  width: 150px;
+  height: auto;
+}
+
 .game_description{
   width: 50%;
   display: flex;

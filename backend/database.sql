@@ -619,3 +619,25 @@ INSERT INTO Rates (game_id, user_id, user_mail, Comments, Rate) VALUES
   ('237182', 1, 'alice@example.com', 'Asymétrie parfaite, top design.',                 8.30),
   ('237182', 2, 'bob@example.com',   'Très bon équilibre des factions.',                 8.50),
   ('237182', 3, 'carol@example.com', 'Parties tendues et stratégiques.',                8.20);
+  
+  DELIMITER $$
+
+CREATE PROCEDURE LeaveEvent (
+    IN p_event_id INT,
+    IN p_user_id INT,
+    IN p_user_mail VARCHAR(255)
+)
+BEGIN
+
+    DELETE FROM Participates
+    WHERE event_id = p_event_id
+      AND user_id = p_user_id
+      AND user_mail = p_user_mail;
+
+    
+    UPDATE Events
+    SET nb_participants = GREATEST(nb_participants - 1, 0)
+    WHERE event_id = p_event_id;
+END$$
+
+DELIMITER ;

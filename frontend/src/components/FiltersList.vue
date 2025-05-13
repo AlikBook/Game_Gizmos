@@ -6,7 +6,7 @@
         <label for="year-slider">Year</label>
         <Slider
           v-model="filters.yearRange"
-          :min="1900"
+          :min="1990"
           :max="2025"
           :step="1"
           :range="true"
@@ -67,6 +67,9 @@ watch(
   border: 1px solid #ccc;
   border-radius: 10px;
   margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .slider-container {
@@ -96,5 +99,11 @@ watch(
 .custom-slider .slider-touch-area {
   height: 0;
   width: 0;
+}
+
+input[type="text"] {
+  border-radius: 5px;
+  padding: 5px;
+  border: 1px solid #ccc;
 }
 </style>
