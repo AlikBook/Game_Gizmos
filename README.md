@@ -1,6 +1,67 @@
-# This is our advanced database project
-To execute our project you need to execute npm install on both the front-end and back-end folders.
-Also you need to create a database in MYSQLWorkbench by copying and executing all the code of the file database.sql
+# 🎲 Game Rating Website: **GameGizmos**
 
-To run the front-end you need to execute npm run dev in the front-end folder
-To run the back-end you need to execute npm start in the back-end folder
+**GameGizmos** is a platform where users can **rate board games** and **join community events**.  
+It provides a simple experience for browsing games and engaging with fellow board game enthusiasts.
+
+---
+
+## 👥 User Roles & Features
+
+### 👤 Guest
+- Can browse board games
+- Cannot rate games or participate in events
+
+### 🧑‍💻 Registered User
+- Can rate games
+- Can join and participate in events
+
+### 🔐 Authentication
+- Simple login system to unlock interactive features
+
+---
+
+# ⚙️ Project Setup Instructions
+
+Follow the steps below to run the project locally.
+
+---
+
+## 📁 Install Dependencies
+
+Run the following in **both** the `frontend` and `backend` folders:
+
+```bash
+npm install
+```
+
+---
+
+## 🗄️ Database Setup
+
+1. Open **MySQL Workbench** (or any SQL tool).
+2. Create the database by executing the contents of the `database.sql` file.
+
+---
+
+## 🚀 Running the Project
+
+### ▶️ Frontend
+
+In the `frontend` folder, start the development server:
+
+```bash
+npm run dev
+```
+
+### 🖥️ Backend
+
+In the `backend` folder, start the backend server:
+
+```bash
+npm start
+```
+
+---
+
+✅ **GameGizmos** is now running locally!  
+You can browse, rate, and enjoy the world of board games 🎯
