@@ -7,10 +7,7 @@ const jwt = require("jsonwebtoken");
 const PORT = 3000;
 
 require("dotenv").config();
-app.use(cors({
-  origin: "https://game-gizmos.vercel.app/", 
-  credentials: true
-}));
+app.use(cors());
 
 app.use(express.json());
 
