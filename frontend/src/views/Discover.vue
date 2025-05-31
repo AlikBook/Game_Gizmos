@@ -25,7 +25,7 @@
 import { ref, computed, onMounted } from "vue";
 import FilterButton from "../components/FilterButton.vue";
 import FiltersList from "../components/FiltersList.vue";
-
+import { API_BASE_URL } from "../config.js";
 const data = ref([]);
 const showFilters = ref(false);
 const appliedFilters = ref({
@@ -41,7 +41,7 @@ const handleFilterToggle = (value) => {
 
 const fetchData = async () => {
   try {
-    const response = await fetch("http://localhost:3000/allgames");
+    const response = await fetch(`${API_BASE_URL}/allgames`);
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }

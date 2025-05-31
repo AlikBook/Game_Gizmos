@@ -65,6 +65,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
+import { API_BASE_URL } from "../config.js"; 
 
 const router = useRouter();
 const isLoggedIn = ref(!!localStorage.getItem("token"));
@@ -81,7 +82,7 @@ const date = ref("");
 
 const login = async () => {
   try {
-    const response = await axios.post("http://localhost:3000/login", {
+    const response = await axios.post(`${API_BASE_URL}/login`, {
       email: email.value,
       password: password.value,
     });
@@ -105,7 +106,7 @@ const login = async () => {
 
 const register = async () => {
   try {
-    await axios.post("http://localhost:3000/register", {
+    await axios.post(`${API_BASE_URL}/register`, {
       email: email.value,
       password: password.value,
     });
@@ -146,7 +147,7 @@ const closeModal = () => {
 
 const createEvent = async () => {
   try {
-    const response = await axios.post("http://localhost:3000/create-event", {
+    const response = await axios.post(`${API_BASE_URL}/create-event`, {
       event_name: eventName.value,
       event_description: eventDescription.value,
       max_participants: maxParticipants.value,

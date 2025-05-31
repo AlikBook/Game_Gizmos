@@ -31,6 +31,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
+import { API_BASE_URL } from "../config.js";
 
 const router = useRouter();
 
@@ -42,7 +43,7 @@ const gameId = ref("");
 
 const createEvent = async () => {
   try {
-    const response = await axios.post("http://localhost:3000/create-event", {
+    const response = await axios.post(`${API_BASE_URL}/create-event`, {
       event_name: eventName.value,
       event_description: eventDescription.value,
       max_participants: maxParticipants.value,

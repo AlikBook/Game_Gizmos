@@ -75,6 +75,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { API_BASE_URL } from "../config.js";
 
 const events = ref([]);
 const upcoming_events = ref([]);
@@ -91,7 +92,7 @@ const joinEvent = async (eventId) => {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/join_event/${eventId}`,
+      `${API_BASE_URL}/join_event/${eventId}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -125,7 +126,7 @@ const formatDate = (dateString) => {
 const leaveEvent = async (eventId) => {
   try {
     const response = await fetch(
-      `http://localhost:3000/leave_event/${eventId}`,
+      `${API_BASE_URL}/leave_event/${eventId}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -148,7 +149,7 @@ const leaveEvent = async (eventId) => {
 };
 
 const fetchAllGames = async () => {
-  const res = await fetch("http://localhost:3000/allgames");
+  const res = await fetch(`${API_BASE_URL}/allgames`);
   return res.ok ? await res.json() : [];
 };
 
@@ -156,8 +157,8 @@ const fetchData = async () => {
   try {
     const [games, resEvents, resUpcoming] = await Promise.all([
       fetchAllGames(),
-      fetch("http://localhost:3000/events"),
-      fetch("http://localhost:3000/upcoming_events"),
+      fetch(`${API_BASE_URL}/events`),
+      fetch(`${API_BASE_URL}/upcoming_events`),
     ]);
 
     allGames.value = games;
@@ -192,7 +193,7 @@ const fetchJoinedEvents = async () => {
 
   try {
     const res = await fetch(
-      `http://localhost:3000/user_events?user_id=${user_id.value}&user_mail=${user_mail.value}`
+      `${API_BASE_URL}/user_events?user_id=${user_id.value}&user_mail=${user_mail.value}`
     );
     const data = await res.json();
     return Array.isArray(data) ? data.map((e) => e.event_id) : [];

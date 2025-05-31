@@ -52,6 +52,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import { API_BASE_URL } from "../config.js"; 
+
 const isLoggedIn = ref(!!localStorage.getItem("token"));
 
 const user_mail = localStorage.getItem("username");
@@ -76,7 +78,7 @@ async function save_comment() {
   };
 
   try {
-    const res = await fetch(`http://localhost:3000/insert_rate/${game_id}`, {
+    const res = await fetch(`${API_BASE_URL}/insert_rate/${game_id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -97,7 +99,7 @@ async function save_comment() {
 const fetchData = async () => {
   try {
     const id = route.params.id;
-    const response = await fetch(`http://localhost:3000/game_rate/${id}`);
+    const response = await fetch(`${API_BASE_URL}/game_rate/${id}`);
     if (!response.ok) throw new Error("Network response was not ok");
 
     const data = await response.json();

@@ -44,6 +44,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { API_BASE_URL } from "../config.js"; 
 
 const topGames = ref([]);
 const events = ref([]);  
@@ -51,7 +52,7 @@ const allGames = ref([]);
 
 const fetchTopGames = async () => {
   try {
-    const response = await fetch("http://localhost:3000/allgames");
+    const response = await fetch(`${API_BASE_URL}/allgames`);
     const games = await response.json();
     allGames.value = games;
     topGames.value = games
@@ -65,7 +66,7 @@ const fetchTopGames = async () => {
 
 const fetchEvents = async () => {
   try {
-    const response = await fetch("http://localhost:3000/upcoming_events");
+    const response = await fetch(`${API_BASE_URL}/upcoming_events`);
     const eventData = await response.json();
 
     events.value = eventData.map(event => {
