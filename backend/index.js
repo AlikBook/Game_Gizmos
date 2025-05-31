@@ -171,10 +171,6 @@ app.get("/upcoming_events", (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Backend is running on http://localhost:${PORT}`);
-});
-
 app.post("/register", (req, res) => {
   const { email, password } = req.body;
 
@@ -326,3 +322,5 @@ app.get("/user_events", (req, res) => {
     res.json(results);
   });
 });
+
+module.exports = app;
