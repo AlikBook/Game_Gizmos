@@ -8,7 +8,9 @@ const PORT = 3000;
 
 require("dotenv").config();
 app.use(cors({
-  origin: "https://game-gizmos.vercel.app",
+  origin: (origin, callback) => {
+    callback(null, origin);
+  },
   credentials: true
 }));
 
