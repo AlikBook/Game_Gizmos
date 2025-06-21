@@ -85,8 +85,7 @@ const fetchEvents = async () => {
 
 
 onMounted(async () => {
-  await fetch('/api/wake-db');      
-  await wait(10000);               
+                
   await fetchTopGames();             
   await fetchEvents();         
 });
