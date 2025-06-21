@@ -9,7 +9,8 @@ jobs:
     steps:
       - name: Start Railway DB
         run: |
-          curl -X POST https://backboard.railway.app/graphql/v2 \
-          -H "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          -d '{"query": "mutation { serviceStart(id: \"0871de4a-ae2e-43cf-b8ca-d6f5e3768e77\") { id } }"}'
+            curl -X POST https://backboard.railway.app/graphql/v2 \
+            -H "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"query":"mutation { serviceStart(id: \"0871de4a-ae2e-43cf-b8ca-d6f5e3768e77\") { id } }"}' \
+            -v
