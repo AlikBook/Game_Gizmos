@@ -1,0 +1,15 @@
+name: Start Railway DB manually
+
+on:
+  workflow_dispatch:  # Esto permite activarlo manualmente o desde Vercel vía API
+
+jobs:
+  start-db:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start Railway DB
+        run: |
+          curl -X POST https://backboard.railway.app/graphql \
+          -H "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          -d '{"query": "mutation { serviceStart(id: \"0871de4a-ae2e-43cf-b8ca-d6f5e3768e77\") { id } }"}'
