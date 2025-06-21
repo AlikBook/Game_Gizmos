@@ -2,7 +2,7 @@ name: Stop Railway DB at night
 
 on:
   schedule:
-    - cron: '0 3 * * *'  # 3AM UTC todos los días
+    - cron: '0 23 * * *'  # 3AM UTC todos los días
 
 jobs:
   stop-db:
