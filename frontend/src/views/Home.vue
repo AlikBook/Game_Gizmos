@@ -85,9 +85,16 @@ const fetchEvents = async () => {
 
 
 onMounted(async () => {
-  await fetchTopGames(); 
-  fetchEvents();         
+  await fetch('/api/wake-db');        
+  await wait(4000);               
+  await fetchTopGames();             
+  await fetchEvents();         
 });
+
+function wait(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 
 </script>
 
