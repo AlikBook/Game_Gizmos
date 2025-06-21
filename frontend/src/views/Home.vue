@@ -85,15 +85,9 @@ const fetchEvents = async () => {
 
 
 onMounted(async () => {
-                
-  await fetchTopGames();             
-  await fetchEvents();         
+  await fetchTopGames(); 
+  fetchEvents();         
 });
-
-function wait(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 
 </script>
 
