@@ -1,7 +1,7 @@
 name: Start Railway DB manually
 
 on:
-  workflow_dispatch:  # Esto permite activarlo manualmente o desde Vercel vía API
+  workflow_dispatch:  
 
 jobs:
   start-db:
