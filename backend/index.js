@@ -39,9 +39,6 @@ app.get("/", (req, res) => {
   res.send("Hello from the backend!");
 });
 
-
-
-
 app.get("/allgames", (req, res) => {
   const sql = "SELECT * FROM Games";
   connection.query(sql, (err, results) => {
