@@ -83,30 +83,13 @@ const fetchEvents = async () => {
 };
 
 
-async function waitForDbReady() {
-  let ready = false;
-  for (let i = 0; i < 10; i++) { // Intenta 10 veces
-    try {
-      const response = await fetch(`${API_BASE_URL}/allgames`);
-      if (response.ok) {
-        ready = true;
-        break;
-      }
-    } catch (e) {}
-    await wait(5000); // Espera 5 segundos antes de intentar de nuevo
-  }
-  return ready;
-}
 onMounted(async () => {
-  await fetch('/api/wake-db');        
-    await waitForDbReady();            
+            
   await fetchTopGames();             
   await fetchEvents();         
 });
 
-function wait(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+
 
 
 </script>
