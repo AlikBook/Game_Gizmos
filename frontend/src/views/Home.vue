@@ -84,7 +84,7 @@ const fetchEvents = async () => {
 
 
 onMounted(async () => {
-  await warmUpBackend();
+  await(9000)
   await fetchTopGames();             
   await fetchEvents();         
 });
