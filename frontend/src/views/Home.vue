@@ -84,6 +84,7 @@ const fetchEvents = async () => {
 
 
 onMounted(async () => {
+  alert("Connecting to the database please wait 10 seconds please")
   await(9000)
   await fetchTopGames();             
   await fetchEvents();         
