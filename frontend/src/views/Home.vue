@@ -84,10 +84,24 @@ const fetchEvents = async () => {
 
 
 onMounted(async () => {
-            
+  await warmUpBackend();
   await fetchTopGames();             
   await fetchEvents();         
 });
+
+async function warmUpBackend() {
+  try {
+    await fetch('/api/ping'); // una ruta rápida y sin lógica pesada
+    await delay(500); // opcional: darle un pequeño tiempo extra
+  } catch (e) {
+    console.error('Loading database', e);
+  }
+}
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 
 
 
