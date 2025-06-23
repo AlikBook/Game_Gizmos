@@ -1,13 +1,12 @@
 const express = require("express");
-const mysql = require("mysql2/promise"); // <-- usa la versión promise
+const app = express();
+const mysql = require("mysql2");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
-
-const app = express();
 const PORT = 3000;
 
+require("dotenv").config();
 app.use(cors({
   origin: (origin, callback) => {
     callback(null, origin);
@@ -17,42 +16,27 @@ app.use(cors({
 
 app.use(express.json());
 
-// Función para obtener conexión con reintentos
-async function getConnection(retries = 5) {
-  while (retries) {
-    try {
-      const connection = await mysql.createConnection({
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
-        port: process.env.DB_PORT,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME,
-      });
-      return connection;
-    } catch (err) {
-      console.error("Error de conexión. Reintentando en 3 segundos...", err.message);
-      retries -= 1;
-      await new Promise(res => setTimeout(res, 3000));
-    }
-  }
-  throw new Error("No se pudo conectar a la base de datos.");
-}
-
-// Ruta de prueba
-app.get("/", async (req, res) => {
-  try {
-    const connection = await getConnection();
-    const [rows] = await connection.execute("SELECT NOW()");
-    await connection.end(); // siempre cerrar la conexión
-    res.send(`Hello from the back end: ${rows[0]['NOW()']}`);
-  } catch (error) {
-    console.error("Fallo al manejar la solicitud:", error);
-    res.status(500).send("Error de conexión a la base de datos.");
-  }
+const connection = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  port: process.env.DB_PORT,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor backend corriendo en puerto ${PORT}`);
+connection.connect((err) => {
+  if (err) {
+    console.error("Erreur de connexion à la base de données:", err.stack);
+    return;
+  }
+  console.log(
+    "Connexion réussie à la base de données avec l'ID",
+    connection.threadId
+  );
+});
+
+app.get("/", (req, res) => {
+  res.send("Hello from the backend!");
 });
 
 app.get("/allgames", (req, res) => {
