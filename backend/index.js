@@ -40,7 +40,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/allgames", (req, res) => {
-  const sql = "SELECT * FROM Games";
+  const sql = "SELECT * FROM Games ";
   connection.query(sql, (err, results) => {
     if (err) {
       console.error("Erreur lors de la récupération des jeux:", err);
