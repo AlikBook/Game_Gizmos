@@ -44,7 +44,7 @@ app.get("/", async (req, res) => {
     const connection = await getConnection();
     const [rows] = await connection.execute("SELECT NOW()");
     await connection.end(); // siempre cerrar la conexión
-    res.send(`Hora de la base de datos: ${rows[0]['NOW()']}`);
+    res.send(`Hello from the back end: ${rows[0]['NOW()']}`);
   } catch (error) {
     console.error("Fallo al manejar la solicitud:", error);
     res.status(500).send("Error de conexión a la base de datos.");

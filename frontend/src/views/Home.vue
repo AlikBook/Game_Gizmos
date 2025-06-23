@@ -83,11 +83,7 @@ const fetchEvents = async () => {
 };
 
 onMounted(async () => {
-  alert("Connecting to the database, please wait 10 seconds...");
-
-  await warmUpBackend(); // Llama primero para despertar la base de datos
-  await delay(9000);     // Espera un poco más por seguridad
-
+ 
   await fetchTopGames();             
   await fetchEvents();         
 });
