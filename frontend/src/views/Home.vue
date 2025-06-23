@@ -82,26 +82,29 @@ const fetchEvents = async () => {
   }
 };
 
-
 onMounted(async () => {
-  alert("Connecting to the database please wait 10 seconds please")
-  await(9000)
+  alert("Connecting to the database, please wait 10 seconds...");
+
+  await warmUpBackend(); // Llama primero para despertar la base de datos
+  await delay(9000);     // Espera un poco más por seguridad
+
   await fetchTopGames();             
   await fetchEvents();         
 });
 
 async function warmUpBackend() {
   try {
-    await fetch('/api/ping'); // una ruta rápida y sin lógica pesada
-    await delay(500); // opcional: darle un pequeño tiempo extra
+    await fetch('/api/ping'); // Asume que tienes esta ruta en tu backend
+    await delay(500); // Tiempo extra opcional
   } catch (e) {
-    console.error('Loading database', e);
+    console.error('Error al hacer ping al backend:', e);
   }
 }
 
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
+
 
 
 
