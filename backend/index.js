@@ -36,7 +36,7 @@ connection.connect((err) => {
 });
 
 app.get("/", (req, res) => {
-  res.send("Hello from the backend!");
+  res.send("Hello from the backend! ");
 });
 
 app.get("/allgames", (req, res) => {
