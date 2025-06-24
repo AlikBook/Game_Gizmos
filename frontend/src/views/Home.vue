@@ -83,7 +83,7 @@ const fetchEvents = async () => {
 };
 
 onMounted(async () => {
-  await delay(500);
+  await delay(5000);
   await fetchTopGames();             
   await fetchEvents();         
 });
