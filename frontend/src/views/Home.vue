@@ -83,8 +83,6 @@ const fetchEvents = async () => {
 };
 
 onMounted(async () => {
-  alert("wait 5 seconds for the database to connect")
-  await delay(5000);
   await fetchTopGames();             
   await fetchEvents();         
 });
